@@ -1,3 +1,62 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu side="start" class="menu_main" contentId="main-content">
+    <ion-header>
+      <ion-toolbar color="dark">
+        <ion-title>Hello, {{ username }}</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content id="main-content">
+      <ion-list lines="none">
+        <ion-item (click)="home()">
+          <ion-icon name="home" class="ion-padding-end"></ion-icon>
+          Home
+        </ion-item>
+        <ion-item (click)="profile()">
+          <ion-icon name="person" class="ion-padding-end"></ion-icon>
+          Your Profile
+        </ion-item>
+        <ion-item-divider></ion-item-divider>
+        <ion-item (click)="inventory()">
+          <ion-icon name="storefront" class="ion-padding-end"></ion-icon>
+          Inventory
+        </ion-item>
+        <ion-item (click)="users()">
+          <ion-icon name="people" class="ion-padding-end"></ion-icon>
+          User Access
+        </ion-item>
+        <ion-item-divider></ion-item-divider>
+        <ion-item (click)="invoices()">
+          <ion-icon name="document-text" class="ion-padding-end"></ion-icon>
+          Invoices
+        </ion-item>
+        <ion-item (click)="suppliers()">
+          <ion-icon name="business" class="ion-padding-end"></ion-icon>
+          Suppliers
+        </ion-item>
+        <ion-item (click)="receipts()">
+          <ion-icon name="document-attach" class="ion-padding-end"></ion-icon>
+          Receipts
+        </ion-item>
+        <ion-item (click)="customers()">
+          <ion-icon name="ice-cream" class="ion-padding-end"></ion-icon>
+          Customers
+        </ion-item>
+        <ion-item-divider></ion-item-divider>
+        <ion-item (click)="settings()">
+          <ion-icon name="settings" class="ion-padding-end"></ion-icon>
+          Settings
+        </ion-item>
+        <ion-item (click)="logout()">
+          <ion-icon name="exit" class="ion-padding-end"></ion-icon>
+          Logout
+        </ion-item>
+        <ion-item (click)="exit()">
+          <ion-icon name="power" class="ion-padding-end"></ion-icon>
+          Exit
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet main></ion-router-outlet>
 </ion-app>
