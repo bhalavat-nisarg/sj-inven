@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { MenuController, NavController } from '@ionic/angular';
 
-import { Platform } from '@ionic/angular';
-
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -13,8 +11,7 @@ export class AppComponent {
 
   constructor(
     private navCtrl: NavController,
-    private menuCtrl: MenuController,
-    private platform: Platform
+    private menuCtrl: MenuController
   ) {}
 
   profile() {
@@ -28,32 +25,32 @@ export class AppComponent {
   }
 
   inventory() {
-    this.navCtrl.navigateRoot('/home');
+    this.navCtrl.navigateForward('/inventory');
     this.menuCtrl.close();
   }
 
   users() {
-    this.navCtrl.navigateRoot('/home');
+    this.navCtrl.navigateForward('/users');
     this.menuCtrl.close();
   }
 
   invoices() {
-    this.navCtrl.navigateRoot('/home');
+    this.navCtrl.navigateForward('/invoices');
     this.menuCtrl.close();
   }
 
   suppliers() {
-    this.navCtrl.navigateRoot('/home');
+    this.navCtrl.navigateForward('/suppliers');
     this.menuCtrl.close();
   }
 
   receipts() {
-    this.navCtrl.navigateRoot('/home');
+    this.navCtrl.navigateForward('/receipts');
     this.menuCtrl.close();
   }
 
   customers() {
-    this.navCtrl.navigateRoot('/home');
+    this.navCtrl.navigateForward('/customers');
     this.menuCtrl.close();
   }
 

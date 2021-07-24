@@ -1,11 +1,12 @@
 <ion-app>
   <ion-menu side="start" class="menu_main" contentId="main-content">
+    <div id="main-content"></div>
     <ion-header>
       <ion-toolbar color="dark">
         <ion-title>Hello, {{ username }}</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content id="main-content">
+    <ion-content>
       <ion-list lines="none">
         <ion-item (click)="home()">
           <ion-icon name="home" class="ion-padding-end"></ion-icon>

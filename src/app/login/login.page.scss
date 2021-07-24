@@ -1,0 +1,38 @@
+.logo {
+  size: 50px;
+  align-content: center;
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+.logo img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.rowStyle {
+  background-color: lightblue;
+  padding-left: 18px;
+  border-radius: 30px;
+  margin: 20px;
+
+  ion-icon {
+    margin-top: 11px;
+  }
+}
+
+ion-title {
+  color: lightskyblue;
+}
+
+ion-footer {
+  padding-bottom: 5%;
+  padding-top: 5%;
+
+  a {
+    color: #cf3c4f;
+    text-decoration-line: none;
+    font-weight: bold;
+  }
+}

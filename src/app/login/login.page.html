@@ -1,0 +1,37 @@
+<ion-content>
+  <div class="logo">
+    <img src="../../assets/bfs-round.png" />
+  </div>
+  <ion-grid>
+    <ion-row class="rowStyle">
+      <ion-icon name="mail"></ion-icon>
+      <ion-input
+        type="email"
+        inputmode="email"
+        placeholder="Email Address"
+        [(ngModel)]="userInfo.email"
+      ></ion-input>
+    </ion-row>
+    <ion-row class="rowStyle">
+      <ion-icon name="key"></ion-icon>
+      <ion-input
+        type="password"
+        inputmode="password"
+        placeholder="Password"
+        [(ngModel)]="userInfo.password"
+      ></ion-input>
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+      <ion-button expand="block" fill="outline" color="dark" (click)="login()">
+        Login
+      </ion-button>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer class="ion-text-center">
+  <ion-text>
+    Developed by
+    <a href="https://bit-fields.com" target="_blank">Bit Field Solutions</a>
+  </ion-text>
+</ion-footer>

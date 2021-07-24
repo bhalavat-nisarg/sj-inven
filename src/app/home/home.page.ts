@@ -16,32 +16,32 @@ export class HomePage {
   ) {}
 
   inventory() {
-    this.navCtrl.navigateRoot('/home');
+    this.navCtrl.navigateRoot('/inventory');
     this.menuCtrl.close();
   }
 
   users() {
-    this.navCtrl.navigateRoot('/home');
+    this.navCtrl.navigateRoot('/users');
     this.menuCtrl.close();
   }
 
   invoices() {
-    this.navCtrl.navigateRoot('/home');
+    this.navCtrl.navigateRoot('/invoices');
     this.menuCtrl.close();
   }
 
   suppliers() {
-    this.navCtrl.navigateRoot('/home');
+    this.navCtrl.navigateRoot('/suppliers');
     this.menuCtrl.close();
   }
 
   receipts() {
-    this.navCtrl.navigateRoot('/home');
+    this.navCtrl.navigateRoot('/receipts');
     this.menuCtrl.close();
   }
 
   customers() {
-    this.navCtrl.navigateRoot('/home');
+    this.navCtrl.navigateRoot('/customers');
     this.menuCtrl.close();
   }
 
