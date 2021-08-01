@@ -4,7 +4,7 @@
   padding-top: 50px;
   padding-bottom: 20px;
 }
-.logo img {
+.logo ion-img {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -20,6 +20,17 @@
   ion-icon {
     margin-top: 11px;
   }
+}
+
+#captcha-row {
+  margin: auto;
+  width: 75%;
+}
+
+.otp-class {
+  font-family: "Quicksand", sans-serif;
+  letter-spacing: 0.5em;
+  text-align: center;
 }
 
 ion-title {

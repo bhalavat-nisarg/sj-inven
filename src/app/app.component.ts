@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { MenuController, NavController } from '@ionic/angular';
+import { AlertController, MenuController, NavController } from '@ionic/angular';
+import { Storage } from '@ionic/storage-angular';
+
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-root',
@@ -7,16 +10,62 @@ import { MenuController, NavController } from '@ionic/angular';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  username = 'Nisarg';
+  userInfo = {
+    email: '',
+    password: '',
+    username: 'Guest',
+    role: 5,
+  };
+
+  firebaseConfig = {
+    apiKey: 'AIzaSyA1INZKfTFxy1girBaoP7P7MDyDULAFKMw',
+    authDomain: 'scoops-joy.firebaseapp.com',
+    projectId: 'scoops-joy',
+    storageBucket: 'scoops-joy.appspot.com',
+    messagingSenderId: '483327075550',
+    appId: '1:483327075550:web:63b7f4692b7af93ec34e4f',
+    measurementId: 'G-DL41BFSQ5V',
+  };
 
   constructor(
     private navCtrl: NavController,
-    private menuCtrl: MenuController
-  ) {}
+    private menuCtrl: MenuController,
+    private storage: Storage,
+    private alertCtrl: AlertController
+  ) {
+    firebase.initializeApp(this.firebaseConfig);
 
-  profile() {
+    this.storage.create();
+    this.storage.get('email').then((val) => (this.userInfo.email = val));
+  }
+
+  async profile() {
     this.navCtrl.navigateForward('/myprofile');
     this.menuCtrl.close();
+    // if (this.userInfo.email) {
+    //   this.navCtrl.navigateForward('/myprofile');
+    //   this.menuCtrl.close();
+    // } else {
+    //   this.menuCtrl.close();
+    //   (
+    //     await this.alertCtrl.create({
+    //       header: 'Invalid User',
+    //       message: 'Please login..',
+    //       buttons: [
+    //         {
+    //           text: 'ok',
+    //           role: 'submit',
+    //           handler: () => this.navCtrl.navigateRoot('/login'),
+    //         },
+    //         {
+    //           text: 'cancel',
+    //           role: 'cancel',
+    //           handler: () => this.alertCtrl.dismiss,
+    //         },
+    //       ],
+    //     })
+    //   ).present();
+    // }
   }
 
   home() {

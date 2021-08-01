@@ -1,25 +1,29 @@
 <ion-content>
   <div class="logo">
-    <img src="../../assets/bfs-round.png" />
+    <ion-img src="../../assets/bfs-round.png"></ion-img>
   </div>
   <ion-grid>
     <ion-row class="rowStyle">
       <ion-icon name="mail"></ion-icon>
+
       <ion-input
         type="email"
         inputmode="email"
-        placeholder="Email Address"
+        placeholder="Email ID"
         [(ngModel)]="userInfo.email"
-      ></ion-input>
+      >
+      </ion-input>
     </ion-row>
     <ion-row class="rowStyle">
       <ion-icon name="key"></ion-icon>
+
       <ion-input
         type="password"
         inputmode="password"
         placeholder="Password"
         [(ngModel)]="userInfo.password"
-      ></ion-input>
+      >
+      </ion-input>
     </ion-row>
     <ion-row class="ion-justify-content-center">
       <ion-button expand="block" fill="outline" color="dark" (click)="login()">

@@ -1,9 +1,39 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>users</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button id="content"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">My Users </ion-title>
+    <ion-buttons slot="end" (click)="add()">
+      <ion-icon
+        name="person-add"
+        class="end-icon-btn ion-padding-end"
+      ></ion-icon>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
+<ion-searchbar showcancelbutton="focus"></ion-searchbar>
 
-<ion-content>
-
+<ion-content class="ion-padding-bottom">
+  <div *ngIf="users.length === 0">
+    <ion-label><h5 class="text-muted">No Users to Show</h5></ion-label>
+  </div>
+  <div *ngIf="users.length > 1" class="padding-bottom">
+    <ion-label>
+      <h5 class="text-muted">
+        Total {{users.length}} users in your organization
+      </h5>
+    </ion-label>
+    <ion-list *ngFor="let usr of users" class="prodList">
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <img src="{{usr.image}}" />
+        </ion-thumbnail>
+        <ion-label class="ion-text-wrap"> {{ usr.name }} </ion-label>
+        <ion-button fill="clear" size="large">
+          <ion-icon name="create" slot="end"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>
