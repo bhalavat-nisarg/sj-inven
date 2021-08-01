@@ -9,6 +9,14 @@ import { Platform } from '@ionic/angular';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+  userInfo = {
+    uid: '',
+    email: '',
+    password: '',
+    username: '',
+    role: 5,
+  };
+
   constructor(
     private navCtrl: NavController,
     private menuCtrl: MenuController,

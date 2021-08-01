@@ -4,7 +4,7 @@
       <ion-menu-button id="content"></ion-menu-button>
     </ion-buttons>
     <ion-title class="ion-text-center">Add New User </ion-title>
-    <ion-buttons slot="end" (click)="edit()">
+    <ion-buttons slot="end" (click)="create()">
       <ion-icon
         name="checkmark"
         class="end-icon-btn ion-padding-end"
@@ -22,16 +22,15 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label position="floating">First Name</ion-label>
-          <ion-input type="text" [(ngModel)]="firstName" required> </ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Last Name</ion-label>
-          <ion-input type="text" [(ngModel)]="lastName" required> </ion-input>
+          <ion-label position="floating">Username</ion-label>
+          <ion-input
+            type="text"
+            inputmode="text"
+            [(ngModel)]="userInfo.username"
+            maxlength="25"
+            required
+          >
+          </ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -39,7 +38,12 @@
       <ion-col>
         <ion-item>
           <ion-label position="floating">Email</ion-label>
-          <ion-input type="email" [(ngModel)]="email" required></ion-input>
+          <ion-input
+            type="email"
+            inputmode="email"
+            [(ngModel)]="userInfo.email"
+            required
+          ></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -49,7 +53,8 @@
           <ion-label position="floating">Password</ion-label>
           <ion-input
             type="password"
-            [(ngModel)]="password"
+            inputmode="password"
+            [(ngModel)]="userInfo.password"
             required
           ></ion-input>
         </ion-item>
@@ -59,9 +64,9 @@
       <ion-col>
         <ion-item>
           <ion-label position="floating">Role</ion-label>
-          <ion-select interface="popover" [(ngModel)]="role" required>
-            <ion-select-option value="1">Admin</ion-select-option>
-            <ion-select-option value="5">User</ion-select-option>
+          <ion-select interface="popover" [(ngModel)]="userInfo.role" required>
+            <ion-select-option value="2">Basic User</ion-select-option>
+            <ion-select-option value="3">Read-only User</ion-select-option>
           </ion-select>
         </ion-item>
       </ion-col>
@@ -72,12 +77,15 @@
   </ion-grid>
 </ion-content>
 <ion-footer class="ion-padding">
-  <ion-button size="normal" fill="clear" color="danger"> Cancel </ion-button>
+  <ion-button size="normal" fill="clear" color="danger" (click)="onCancel()">
+    Cancel
+  </ion-button>
   <ion-button
     size="normal"
     fill="outline"
     color="tertiary"
     style="float: right"
+    (click)="create()"
   >
     Create
   </ion-button>

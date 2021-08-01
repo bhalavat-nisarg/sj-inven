@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  AlertController,
-  NavController,
-  ToastController,
-} from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 
 import * as Firebase from 'firebase/app';
@@ -18,6 +14,7 @@ import 'firebase/auth';
 export class LoginPage implements OnInit {
   fire = Firebase.default;
   userInfo = {
+    uid: '',
     email: '',
     password: '',
     username: '',
@@ -27,8 +24,7 @@ export class LoginPage implements OnInit {
   constructor(
     private storage: Storage,
     private navCtrl: NavController,
-    private toastCtrl: ToastController,
-    private alertCtrl: AlertController
+    private toastCtrl: ToastController
   ) {
     this.storage.clear();
   }
@@ -36,42 +32,35 @@ export class LoginPage implements OnInit {
   ngOnInit() {}
 
   async login() {
-    // this.navCtrl.navigateForward('/home');
-
     await this.fire
       .auth()
       .signInWithEmailAndPassword(this.userInfo.email, this.userInfo.password)
       .then(async (user) => {
         console.log(user);
-        this.storage.set('username', user.user.email);
+        this.storage.set('email', user.user.email);
+        this.userInfo.uid = user.user.uid;
         this.fire
           .firestore()
           .collection('users')
           .where('uid', '==', user.user.uid)
           .get()
           .then((querySnap) => {
-            console.log(querySnap);
+            querySnap.docs.forEach((doc) => {
+              this.userInfo.username = doc.data().username;
+              this.userInfo.role = doc.data().role;
+            });
           });
 
         (
           await this.toastCtrl.create({
-            message: 'Welcome ' + user.user.displayName,
+            message: 'Welcome ' + this.userInfo.username,
             duration: 3000,
           })
         ).present();
+        this.navCtrl.navigateForward('/home');
       })
       .catch(async (err) => {
         console.error(err);
-        await this.fire
-          .firestore()
-          .collection('users')
-          .where('uid', '==', 'aG5QfdcNFEa26C03G9I414wbfmh1')
-          .get()
-          .then((querySnap) => {
-            querySnap.docs.forEach((doc) => {
-              console.log(doc.data());
-            });
-          });
         (
           await this.toastCtrl.create({
             message: err.message,
