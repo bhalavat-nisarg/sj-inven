@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button id="content"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Category</ion-title>
+    <ion-buttons slot="end" (click)="goToInventory()">
+      <ion-icon
+        name="storefront"
+        class="end-icon-btn ion-padding-end"
+      ></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-searchbar showcancelbutton="focus"></ion-searchbar>
+
+<ion-content class="ion-padding-bottom">
+  <div *ngIf="inCategory.length === 0">
+    <ion-label> <h5 class="text-muted">No Categories to Show</h5> </ion-label>
+  </div>
+  <div *ngIf="inCategory.length > 0" class="padding-bottom">
+    <ion-label>
+      <h5 class="text-muted">Total {{inCategory.length}} Categories</h5>
+    </ion-label>
+    <ion-list *ngFor="let catG of inCategory" class="catList">
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <img src="{{catG.imgUrl}}" />
+        </ion-thumbnail>
+        <ion-label class="ion-text-wrap">{{catG.catDesc}}</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

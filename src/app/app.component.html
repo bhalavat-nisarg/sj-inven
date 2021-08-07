@@ -3,7 +3,7 @@
     <div id="main-content"></div>
     <ion-header>
       <ion-toolbar color="dark">
-        <ion-title>Hello, {{ username }}</ion-title>
+        <ion-title>Hello, {{ userInfo.username }}</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -20,6 +20,10 @@
         <ion-item (click)="inventory()">
           <ion-icon name="storefront" class="ion-padding-end"></ion-icon>
           Inventory
+        </ion-item>
+        <ion-item (click)="category()">
+          <ion-icon name="pricetags" class="ion-padding-end"></ion-icon>
+          Category
         </ion-item>
         <ion-item (click)="users()">
           <ion-icon name="people" class="ion-padding-end"></ion-icon>

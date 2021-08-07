@@ -1,9 +1,34 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>inventory</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button id="content"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Inventory</ion-title>
+    <ion-buttons slot="end" (click)="goToCategory()">
+      <ion-icon
+        name="pricetags"
+        class="end-icon-btn ion-padding-end"
+      ></ion-icon>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
+<ion-searchbar showcancelbutton="focus"></ion-searchbar>
 
-<ion-content>
-
+<ion-content class="ion-padding-bottom">
+  <div *ngIf="inProducts.length === 0">
+    <ion-label> <h5 class="text-muted">No Products to Show</h5> </ion-label>
+  </div>
+  <div *ngIf="inProducts.length > 0" class="padding-bottom">
+    <ion-label>
+      <h5 class="text-muted">Total {{inProducts.length}} Products</h5>
+    </ion-label>
+    <ion-list *ngFor="let prod of inProducts" class="catList">
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <img src="{{prod.imgUrl}}" />
+        </ion-thumbnail>
+        <ion-label class="ion-text-wrap">{{prod.productName}}</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>

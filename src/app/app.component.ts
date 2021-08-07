@@ -78,6 +78,11 @@ export class AppComponent {
     this.menuCtrl.close();
   }
 
+  category() {
+    this.navCtrl.navigateForward('/category');
+    this.menuCtrl.close();
+  }
+
   users() {
     this.navCtrl.navigateForward('/users');
     this.menuCtrl.close();

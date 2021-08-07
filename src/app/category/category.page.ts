@@ -2,20 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { LoadingController, NavController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-inventory',
-  templateUrl: './inventory.page.html',
-  styleUrls: ['./inventory.page.scss'],
+  selector: 'app-category',
+  templateUrl: './category.page.html',
+  styleUrls: ['./category.page.scss'],
 })
-export class InventoryPage implements OnInit {
-  inProducts = [
+export class CategoryPage implements OnInit {
+  inCategory = [
     {
-      productCode: 0,
-      productName: '',
       catCode: '',
-      mrp: 0.0,
-      purPrice: 0.0,
-      selPrice: 0.0,
-      qty: 0,
+      catDesc: '',
       startDate: '',
       endDate: '',
       createdBy: '',
@@ -35,27 +30,22 @@ export class InventoryPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.inProducts = [];
+    this.inCategory = [];
     this.searchBar = document.querySelector('ion-searchbar');
 
     this.loadingDummy();
     this.searchBar.addEventListener('ionInput', this.handleInput);
   }
 
-  goToCategory() {
-    this.navCtrl.navigateForward('/category');
+  goToInventory() {
+    this.navCtrl.navigateBack('/inventory');
   }
 
   loadingDummy() {
-    this.inProducts = [
+    this.inCategory = [
       {
-        productCode: 10001,
-        productName: 'Rich Chocolate',
-        catCode: 'C001',
-        mrp: 25.0,
-        purPrice: 0.0,
-        selPrice: 0.0,
-        qty: 0,
+        catCode: 'A001',
+        catDesc: 'Badabite Ice Cream ',
         startDate: '01 Aug 2021',
         endDate: '31 Dec 4712',
         createdBy: '-1',
@@ -69,7 +59,7 @@ export class InventoryPage implements OnInit {
 
   handleInput(event) {
     // search Bar
-    this.items = Array.from(document.querySelectorAll('.prodList'));
+    this.items = Array.from(document.querySelectorAll('.catList'));
     // this.items = Array.from(document.querySelector('.prodList').children);
 
     const query = event.srcElement.value.toLowerCase();
