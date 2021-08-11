@@ -29,9 +29,16 @@ export class CategoryPage implements OnInit {
     private loadingCtrl: LoadingController
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.inCategory = [];
     this.searchBar = document.querySelector('ion-searchbar');
+
+    (
+      await this.loadingCtrl.create({
+        message: 'Please Wait..',
+        duration: 5000,
+      })
+    ).present();
 
     this.loadingDummy();
     this.searchBar.addEventListener('ionInput', this.handleInput);

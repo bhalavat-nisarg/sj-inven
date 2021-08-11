@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 
-import * as Firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 
@@ -12,7 +12,6 @@ import 'firebase/auth';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  fire = Firebase.default;
   userInfo = {
     uid: '',
     email: '',
@@ -32,14 +31,14 @@ export class LoginPage implements OnInit {
   ngOnInit() {}
 
   async login() {
-    await this.fire
+    await firebase
       .auth()
       .signInWithEmailAndPassword(this.userInfo.email, this.userInfo.password)
       .then(async (user) => {
         console.log(user);
         this.storage.set('email', user.user.email);
         this.userInfo.uid = user.user.uid;
-        this.fire
+        firebase
           .firestore()
           .collection('users')
           .where('uid', '==', user.user.uid)

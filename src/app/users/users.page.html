@@ -25,14 +25,13 @@
       </h5>
     </ion-label>
     <ion-list *ngFor="let usr of users" class="prodList">
-      <ion-item>
-        <ion-thumbnail slot="start">
-          <img src="{{usr.image}}" />
-        </ion-thumbnail>
+      <ion-item button detail>
+        <ion-icon
+          name="person-circle-outline"
+          slot="start"
+          color="dark"
+        ></ion-icon>
         <ion-label class="ion-text-wrap"> {{ usr.name }} </ion-label>
-        <ion-button fill="clear" size="large">
-          <ion-icon name="create" slot="end"></ion-icon>
-        </ion-button>
       </ion-item>
     </ion-list>
   </div>

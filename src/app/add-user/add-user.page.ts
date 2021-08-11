@@ -5,7 +5,7 @@ import {
   ToastController,
 } from '@ionic/angular';
 
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 
@@ -25,7 +25,6 @@ export class AddUserPage implements OnInit {
     role: 5,
   };
 
-  fire = firebase.default;
   masterPass: string;
   masterEmail: string;
 
@@ -44,7 +43,7 @@ export class AddUserPage implements OnInit {
   }
 
   ngOnInit() {
-    this.createdUser = this.fire.auth().currentUser;
+    this.createdUser = firebase.auth().currentUser;
   }
 
   async create() {
@@ -109,7 +108,7 @@ export class AddUserPage implements OnInit {
   async createAndLogin() {
     // console.log(this.masterEmail, this.masterPass);
 
-    await this.fire
+    await firebase
       .auth()
       .createUserWithEmailAndPassword(
         this.userInfo.email,
@@ -128,19 +127,19 @@ export class AddUserPage implements OnInit {
         ).present();
       });
 
-    this.createdUser = this.fire.auth().currentUser;
-    this.createdUserEmail = this.fire.auth().currentUser.email;
+    this.createdUser = firebase.auth().currentUser;
+    this.createdUserEmail = firebase.auth().currentUser.email;
 
-    await this.fire.auth().signOut();
+    await firebase.auth().signOut();
     await this.signInMaster();
   }
 
   async signInMaster() {
-    await this.fire
+    await firebase
       .auth()
       .signInWithEmailAndPassword(this.masterEmail, this.masterPass)
       .then(async () => {
-        await this.fire
+        await firebase
           .firestore()
           .collection('users')
           .add({

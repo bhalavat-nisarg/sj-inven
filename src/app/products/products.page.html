@@ -1,0 +1,95 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button id="content"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">{{inProducts.productName}}</ion-title>
+    <ion-buttons slot="end" (click)="goToInventory()">
+      <ion-icon name="close" class="end-icon-btn ion-padding-end"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-img src="../../assets/extras/product-page.png"></ion-img>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-label class="prod-label"> Product Code </ion-label>
+      </ion-col>
+      <ion-col> {{inProducts.productCode}} </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="prod-label"> Category Code </ion-label>
+      </ion-col>
+      <ion-col> {{inProducts.catCode}} </ion-col>
+    </ion-row>
+    <ion-row>&nbsp;</ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="prod-label"> Total Quantity </ion-label>
+      </ion-col>
+      <ion-col *ngIf="inProducts.qty === 1"> {{inProducts.qty}} piece </ion-col>
+      <ion-col *ngIf="inProducts.qty > 1 || inProducts.qty === 0">
+        {{inProducts.qty}} pieces
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="prod-label"> MRP </ion-label>
+      </ion-col>
+      <ion-col> &#8377; {{inProducts.mrp | number : '1.2-2'}} </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="prod-label"> Purchase Price </ion-label>
+      </ion-col>
+      <ion-col> &#8377; {{inProducts.purPrice | number : '1.2-2'}} </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="prod-label"> Selling Price </ion-label>
+      </ion-col>
+      <ion-col> &#8377; {{inProducts.selPrice | number : '1.2-2'}} </ion-col>
+    </ion-row>
+    <ion-row> &nbsp; </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="prod-label"> Start Date </ion-label>
+      </ion-col>
+      <ion-col>{{inProducts.startDate | date: 'dd-MMM-yyyy'}} </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="prod-label"> End Date </ion-label>
+      </ion-col>
+      <ion-col>{{inProducts.endDate | date: 'dd-MMM-yyyy'}} </ion-col>
+    </ion-row>
+    <ion-row>&nbsp;</ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="prod-label"> Created By </ion-label>
+      </ion-col>
+      <ion-col>{{inProducts.createdBy}} </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="prod-label"> Creation Date </ion-label>
+      </ion-col>
+      <ion-col>{{inProducts.createDate | date: 'dd-MMM-yyyy'}} </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="prod-label"> Last Updated By </ion-label>
+      </ion-col>
+      <ion-col>{{inProducts.lastUpdatedBy}} </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="prod-label"> Last Update Date </ion-label>
+      </ion-col>
+      <ion-col>{{inProducts.lastUpdateDate | date: 'dd-MMM-yyyy'}} </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
