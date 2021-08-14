@@ -1,9 +1,43 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>suppliers</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button id="content"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Suppliers</ion-title>
+    <ion-buttons
+      slot="end"
+      (click)="addNewSuppliers()"
+      *ngIf="viewEdit === false"
+    >
+      <ion-icon name="add" class="end-icon-btn ion-padding-end"></ion-icon>
+    </ion-buttons>
+    <ion-buttons
+      slot="end"
+      (click)="cancelSupplier()"
+      *ngIf="viewEdit === true"
+    >
+      <ion-icon name="close" class="end-icon-btn ion-padding-end"></ion-icon>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-searchbar showcancelbutton="focus" *ngIf="viewEdit === false">
+</ion-searchbar>
+<ion-content class="ion-padding-bottom" *ngIf="viewEdit === false">
+  <div *ngIf="suppliers.length === 0">
+    <ion-label><h5 class="text-muted">No Suppliers to Show</h5></ion-label>
+  </div>
+  <div *ngIf="suppliers.length > 0" class="padding-bottom">
+    <ion-label>
+      <h5 class="text-muted">Total {{suppliers.length}} Suppliers</h5>
+    </ion-label>
+    <ion-list *ngFor="let supp of suppliers" class="prodList">
+      <ion-item button detail (click)="toVendor(supp)">
+        <ion-icon name="business-outline" slot="start" color="dark"> </ion-icon>
+        <ion-label class="ion-text-wrap"> {{ supp.vendorName }} </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>
+
+<ion-content class="ion-padding-bottom" *ngIf="viewEdit === true"></ion-content>
