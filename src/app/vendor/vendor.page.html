@@ -10,4 +10,82 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <ion-img src="../../assets/extras/hand-shake.png"></ion-img>
+  <ion-item-divider></ion-item-divider>
+  <ion-grid class="ion-padding">
+    <ion-row>
+      <ion-col>
+        <ion-label class="text-muted headings">Registered Address</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="ion-text-wrap">
+          {{vendor.address1}}, {{vendor.address2}}, {{vendor.address3}},
+          {{vendor.city}}, {{vendor.state}} - {{vendor.pincode}},
+          {{vendor.country}}
+        </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>&nbsp;</ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="text-muted headings">GST Number</ion-label>
+      </ion-col>
+      <ion-col>
+        <ion-label class="ion-text-wrap" *ngIf="vendor.gst !== ''">
+          {{vendor.gst}}
+        </ion-label>
+        <ion-label class="ion-text-wrap" *ngIf="vendor.gst === ''">
+          N.A.
+        </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>&nbsp;</ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="text-muted headings">Contact Info</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="ion-text-wrap"> {{vendor.mobile}} </ion-label>
+      </ion-col>
+      <ion-col>
+        <ion-label class="ion-text-wrap"> {{vendor.email}} </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>&nbsp;</ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="text-muted headings">
+          Comments / Description
+        </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="ion-text-wrap" *ngIf="vendor.description!== ''">
+          {{vendor.description}}
+        </ion-label>
+        <ion-label class="ion-text-wrap" *ngIf="vendor.description === ''">
+          N.A.
+        </ion-label>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer style="padding: 5px" *ngIf="vendor.status === 'Active'">
+  <ion-button expand="full" color="danger" (click)="toggleStatus()">
+    Disable {{source}}
+    <ion-icon name="eye-off" slot="start"></ion-icon>
+  </ion-button>
+</ion-footer>
+<ion-footer style="padding: 5px" *ngIf="vendor.status === 'Inactive'">
+  <ion-button expand="full" color="success" (click)="toggleStatus()">
+    Enable {{source}}
+    <ion-icon name="eye" slot="start"></ion-icon>
+  </ion-button>
+</ion-footer>

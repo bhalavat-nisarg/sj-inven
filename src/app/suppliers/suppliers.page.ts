@@ -22,6 +22,9 @@ export class SuppliersPage implements OnInit {
       pincode: '',
       description: '',
       status: '',
+      mobile: '',
+      email: '',
+      gst: '',
       createdBy: '',
       createDate: '',
       lastUpdateDate: '',
@@ -41,6 +44,7 @@ export class SuppliersPage implements OnInit {
     const navigateExtras: NavigationExtras = {
       state: {
         vendor: supplier,
+        source: 'supplier',
       },
     };
 
@@ -68,6 +72,9 @@ export class SuppliersPage implements OnInit {
         country: 'India',
         pincode: '390019',
         status: 'Active',
+        mobile: '9876543210',
+        email: 'info@dummy.com',
+        gst: '',
         description: '',
         createdBy: '-1',
         createDate: '1 Aug 2021',
