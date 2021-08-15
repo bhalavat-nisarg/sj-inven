@@ -4,26 +4,14 @@
       <ion-menu-button id="content"></ion-menu-button>
     </ion-buttons>
     <ion-title class="ion-text-center">Suppliers</ion-title>
-    <ion-buttons
-      slot="end"
-      (click)="addNewSuppliers()"
-      *ngIf="viewEdit === false"
-    >
+    <ion-buttons slot="end" (click)="addNewSuppliers()">
       <ion-icon name="add" class="end-icon-btn ion-padding-end"></ion-icon>
-    </ion-buttons>
-    <ion-buttons
-      slot="end"
-      (click)="cancelSupplier()"
-      *ngIf="viewEdit === true"
-    >
-      <ion-icon name="close" class="end-icon-btn ion-padding-end"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-searchbar showcancelbutton="focus" *ngIf="viewEdit === false">
-</ion-searchbar>
-<ion-content class="ion-padding-bottom" *ngIf="viewEdit === false">
+<ion-searchbar showcancelbutton="focus"> </ion-searchbar>
+<ion-content class="ion-padding-bottom">
   <div *ngIf="suppliers.length === 0">
     <ion-label><h5 class="text-muted">No Suppliers to Show</h5></ion-label>
   </div>
@@ -39,5 +27,3 @@
     </ion-list>
   </div>
 </ion-content>
-
-<ion-content class="ion-padding-bottom" *ngIf="viewEdit === true"></ion-content>

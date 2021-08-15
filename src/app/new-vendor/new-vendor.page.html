@@ -1,0 +1,189 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button id="content"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Add New source</ion-title>
+    <ion-buttons slot="end" (click)="addNewSuppliers(inVendor.pincode)">
+      <ion-icon
+        name="checkmark"
+        class="end-icon-btn ion-padding-end"
+      ></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding-bottom">
+  <ion-grid class="ion-padding">
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Supplier Name</ion-label>
+          <ion-input
+            [(ngModel)]="inVendor.vendorName"
+            inputmode="text"
+            maxlength="50"
+            type="text"
+            required
+          >
+          </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Address Line 1</ion-label>
+          <ion-input
+            [(ngModel)]="inVendor.address1"
+            inputmode="text"
+            maxlength="30"
+            type="text"
+            required
+          >
+          </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Address Line 2</ion-label>
+          <ion-input
+            [(ngModel)]="inVendor.address2"
+            inputmode="text"
+            maxlength="30"
+            type="text"
+          >
+          </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Address Line 3</ion-label>
+          <ion-input
+            [(ngModel)]="inVendor.address3"
+            inputmode="text"
+            maxlength="30"
+            type="text"
+          >
+          </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">GST Number</ion-label>
+          <ion-input
+            [(ngModel)]="inVendor.gst"
+            type="text"
+            inputmode="text"
+            maxlength="15"
+          >
+          </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Pincode</ion-label>
+          <ion-input
+            [(ngModel)]="inVendor.pincode"
+            type="text"
+            inputmode="number"
+            maxlength="6"
+            id="pincode"
+          >
+          </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">City</ion-label>
+          <ion-input
+            [(ngModel)]="inVendor.city"
+            inputmode="text"
+            maxlength="35"
+          >
+          </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">State</ion-label>
+          <ion-input
+            [(ngModel)]="inVendor.state"
+            inputmode="text"
+            type="text"
+            maxlength="45"
+          >
+          </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Country</ion-label>
+          <ion-input
+            [(ngModel)]="inVendor.country"
+            inputmode="text"
+            type="text"
+            maxlength="20"
+          >
+          </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Email</ion-label>
+          <ion-input
+            [(ngModel)]="inVendor.email"
+            inputmode="email"
+            type="email"
+            maxlength="30"
+          >
+          </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Mobile</ion-label>
+          <ion-input
+            [(ngModel)]="inVendor.mobile"
+            inputmode="number"
+            type="text"
+            maxlength="10"
+          >
+          </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Comments/Description</ion-label>
+          <ion-textarea
+            [(ngModel)]="inVendor.description"
+            inputmode="text"
+            type="text"
+            maxlength="250"
+          >
+          </ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

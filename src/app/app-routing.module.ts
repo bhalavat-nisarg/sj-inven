@@ -73,6 +73,10 @@ const routes: Routes = [
     path: 'vendor',
     loadChildren: () => import('./vendor/vendor.module').then( m => m.VendorPageModule)
   },
+  {
+    path: 'new-vendor',
+    loadChildren: () => import('./new-vendor/new-vendor.module').then( m => m.NewVendorPageModule)
+  },
 ];
 
 @NgModule({

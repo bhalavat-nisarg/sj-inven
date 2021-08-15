@@ -8,7 +8,6 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['./suppliers.page.scss'],
 })
 export class SuppliersPage implements OnInit {
-  viewEdit: boolean;
   suppliers = [
     {
       vendorId: 0,
@@ -36,7 +35,6 @@ export class SuppliersPage implements OnInit {
 
   ngOnInit() {
     this.suppliers = [];
-    this.viewEdit = false;
     this.loadDummy();
   }
 
@@ -52,11 +50,13 @@ export class SuppliersPage implements OnInit {
   }
 
   addNewSuppliers() {
-    this.viewEdit = true;
-  }
+    const navigateExtras: NavigationExtras = {
+      state: {
+        source: 'supplier',
+      },
+    };
 
-  cancelSupplier() {
-    this.viewEdit = false;
+    this.navCtrl.navigateForward('/new-vendor', navigateExtras);
   }
 
   loadDummy() {
