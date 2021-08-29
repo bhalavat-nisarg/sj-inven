@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import * as axiosMain from 'axios';
 
 @Component({
@@ -46,54 +47,86 @@ export class NewVendorPage implements OnInit {
   ];
 
   axios = axiosMain.default;
-  pinCode: any;
-  inPin: string;
 
-  constructor() {}
+  visibleSection: string;
 
-  ngOnInit() {
-    this.pinCode = document.getElementById('pincode');
-    console.log(this.pinCode);
-    this.pinCode.addEventListener('ionInput', this.handleInput);
+  constructor(private navCtrl: NavController) {
+    this.visibleSection = 'part-a';
   }
 
-  async addNewSuppliers(pin: string) {
-    const getUrl = 'https://api.postalpincode.in/pincode/' + pin;
-    console.log(getUrl);
-    await this.axios
-      .get(getUrl)
-      .then((resp) => {
-        if (resp.data[0].PostOffice !== null) {
-          this.govPincode = resp.data[0].PostOffice;
-        }
-        console.log(this.govPincode);
-        console.log(resp.status);
-      })
-      .catch((err) => {
-        console.log('Error in getting Pin Area: ' + err);
-      });
+  ngOnInit() {}
+
+  onCancelBtn() {
+    //this.navCtrl.navigateBack('/home/posting');
   }
 
-  handleInput(event) {
-    // // search Bar
-    // this.items = Array.from(document.querySelectorAll('.prodList'));
-    // // this.items = Array.from(document.querySelector('.prodList').children);
+  onSubmitBtn() {
+    // if (this.btnBool(3)) {
+    //     this.flatAd.propRooms = [];
+    //     this.flatAd.propRooms = this.roomDetails;
+    //     console.log(this.flatAd);
+    //     this.postFire();
+    // } else {
+    //     console.log('Fields are missing..');
+    // }
+  }
 
-    // const query = event.srcElement.value.toLowerCase();
-    // // console.log(this.items);
-    // requestAnimationFrame(() => {
-    //   this.items.forEach((item) => {
-    //     // const shouldShow = item.children[1].textContent.toLowerCase().indexOf(query) > -1;
-    //     const shouldShow = item.textContent.toLowerCase().indexOf(query) > -1;
-    //     item.style.display = shouldShow ? 'block' : 'none';
-    //   }, this);
-    // });
-    console.log(event);
-    if (this.inPin === undefined) {
-      this.inPin = event.detail.data;
-    } else {
-      this.inPin += event.detail.data;
+  onPlusBtn() {
+    // if (this.flatAd.propRoomsCount < 5) {
+    //     this.flatAd.propRoomsCount = this.flatAd.propRoomsCount + 1;
+    //     let i = this.flatAd.propRoomsCount;
+    //     this.roomSection.push('Room_' + i);
+    // } else {
+    //     console.log('Max Value reached');
+    // }
+  }
+  onMinusBtn() {
+    // if (this.flatAd.propRoomsCount > 0) {
+    //     this.flatAd.propRoomsCount = this.flatAd.propRoomsCount - 1;
+    //     this.roomSection.pop();
+    //     this.roomDetails = [];
+    // } else {
+    //     console.log('Min Value reached');
+    // }
+  }
+
+  async onNextBtn() {
+    this.govPincode = [];
+    if (this.visibleSection === 'part-a' && this.btnBool(0)) {
+      this.visibleSection = 'part-b';
+      const getUrl =
+        'https://api.postalpincode.in/pincode/' + this.inVendor.pincode;
+      console.log(getUrl);
+      await this.axios
+        .get(getUrl)
+        .then((resp) => {
+          if (
+            resp.data[0].PostOffice !== null &&
+            resp.data[0].Status === 'Success'
+          ) {
+            this.govPincode = resp.data[0].PostOffice;
+          } else {
+            this.inVendor.pincode = '';
+            this.visibleSection = 'part-a';
+            alert('Invalid Pincode!');
+          }
+          console.log(this.govPincode);
+          //console.log(resp.status);
+          console.log(resp.data[0].Status);
+        })
+        .catch((err) => {
+          console.log('Error in getting Pin Area: ' + err);
+        });
     }
-    console.log(this.inPin);
+  }
+
+  onPrevBtn() {
+    if (this.visibleSection === 'part-b') {
+      this.visibleSection = 'part-a';
+    }
+  }
+
+  btnBool(val: number) {
+    return true;
   }
 }
