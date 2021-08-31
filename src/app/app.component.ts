@@ -50,33 +50,9 @@ export class AppComponent {
     // });
   }
 
-  async profile() {
+  account() {
     this.navCtrl.navigateForward('/myaccount');
     this.menuCtrl.close();
-    // if (this.userInfo.email) {
-    //   this.navCtrl.navigateForward('/myaccount');
-    //   this.menuCtrl.close();
-    // } else {
-    //   this.menuCtrl.close();
-    //   (
-    //     await this.alertCtrl.create({
-    //       header: 'Invalid User',
-    //       message: 'Please login..',
-    //       buttons: [
-    //         {
-    //           text: 'ok',
-    //           role: 'submit',
-    //           handler: () => this.navCtrl.navigateRoot('/login'),
-    //         },
-    //         {
-    //           text: 'cancel',
-    //           role: 'cancel',
-    //           handler: () => this.alertCtrl.dismiss,
-    //         },
-    //       ],
-    //     })
-    //   ).present();
-    // }
   }
 
   home() {
@@ -119,10 +95,10 @@ export class AppComponent {
     this.menuCtrl.close();
   }
 
-  settings() {
-    this.navCtrl.navigateForward('/settings');
-    this.menuCtrl.close();
-  }
+  // settings() {
+  //   this.navCtrl.navigateForward('/settings');
+  //   this.menuCtrl.close();
+  // }
 
   logout() {
     this.navCtrl.navigateRoot('/login');

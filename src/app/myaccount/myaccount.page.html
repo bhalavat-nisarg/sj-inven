@@ -21,50 +21,46 @@
       <ion-col>
         <ion-label class="heading">Full Name</ion-label>
       </ion-col>
-      <ion-col><ion-label>Dummy User</ion-label></ion-col>
+      <ion-col> <ion-label> {{userInfo.name}} </ion-label> </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
         <ion-label class="heading">Username</ion-label>
       </ion-col>
-      <ion-col> dummy.user </ion-col>
+      <ion-col> <ion-label> {{userInfo.username}} </ion-label> </ion-col>
     </ion-row>
-    <!-- <ion-row>
-      <ion-col>
-        <ion-label class="heading">Email ID</ion-label>
-      </ion-col>
-      <ion-col> dummy.user@example.com </ion-col>
-    </ion-row> -->
     <ion-row>
       <ion-col>
         <ion-label class="heading">Mobile Number</ion-label>
       </ion-col>
-      <ion-col> 98XXX XXXXX </ion-col>
+      <ion-col> <ion-label> {{userInfo.mobile}} </ion-label> </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
         <ion-label class="heading">Current Role</ion-label>
       </ion-col>
-      <ion-col> Account Admin </ion-col>
+      <ion-col> <ion-label> {{userInfo.roleName}} </ion-label> </ion-col>
     </ion-row>
     <ion-row> &nbsp; </ion-row>
     <ion-row>
       <ion-col>
         <ion-label class="heading">Account Name</ion-label>
       </ion-col>
-      <ion-col> Scoops & Joy </ion-col>
+      <ion-col> <ion-label> {{userInfo.accountName}} </ion-label> </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
         <ion-label class="heading">Account Type</ion-label>
       </ion-col>
-      <ion-col> -- </ion-col>
+      <ion-col> <ion-label> {{userInfo.accountType}} </ion-label> </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
         <ion-label class="heading">Account Users</ion-label>
       </ion-col>
-      <ion-col> Max 5 </ion-col>
+      <ion-col>
+        <ion-label> Max {{userInfo.accountUsers}} Users </ion-label>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
