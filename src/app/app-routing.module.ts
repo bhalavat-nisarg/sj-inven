@@ -18,9 +18,9 @@ const routes: Routes = [
       import('./login/login.module').then((m) => m.LoginPageModule),
   },
   {
-    path: 'myprofile',
+    path: 'myaccount',
     loadChildren: () =>
-      import('./myprofile/myprofile.module').then((m) => m.MyprofilePageModule),
+      import('./myaccount/myaccount.module').then((m) => m.MyAccountPageModule),
   },
   {
     path: 'inventory',
@@ -59,23 +59,30 @@ const routes: Routes = [
   },
   {
     path: 'add-user',
-    loadChildren: () => import('./add-user/add-user.module').then( m => m.AddUserPageModule)
+    loadChildren: () =>
+      import('./add-user/add-user.module').then((m) => m.AddUserPageModule),
   },
   {
     path: 'category',
-    loadChildren: () => import('./category/category.module').then( m => m.CategoryPageModule)
+    loadChildren: () =>
+      import('./category/category.module').then((m) => m.CategoryPageModule),
   },
   {
     path: 'products',
-    loadChildren: () => import('./products/products.module').then( m => m.ProductsPageModule)
+    loadChildren: () =>
+      import('./products/products.module').then((m) => m.ProductsPageModule),
   },
   {
     path: 'vendor',
-    loadChildren: () => import('./vendor/vendor.module').then( m => m.VendorPageModule)
+    loadChildren: () =>
+      import('./vendor/vendor.module').then((m) => m.VendorPageModule),
   },
   {
     path: 'new-vendor',
-    loadChildren: () => import('./new-vendor/new-vendor.module').then( m => m.NewVendorPageModule)
+    loadChildren: () =>
+      import('./new-vendor/new-vendor.module').then(
+        (m) => m.NewVendorPageModule
+      ),
   },
 ];
 

@@ -51,10 +51,10 @@ export class AppComponent {
   }
 
   async profile() {
-    this.navCtrl.navigateForward('/myprofile');
+    this.navCtrl.navigateForward('/myaccount');
     this.menuCtrl.close();
     // if (this.userInfo.email) {
-    //   this.navCtrl.navigateForward('/myprofile');
+    //   this.navCtrl.navigateForward('/myaccount');
     //   this.menuCtrl.close();
     // } else {
     //   this.menuCtrl.close();

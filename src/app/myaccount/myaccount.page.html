@@ -1,0 +1,76 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button id="content"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center"> My Account </ion-title>
+    <ion-buttons slot="end" (click)="help()">
+      <ion-icon name="help" class="end-icon-btn ion-padding-end"> </ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-img src="../../assets/home/users.png"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="heading">Full Name</ion-label>
+      </ion-col>
+      <ion-col><ion-label>Dummy User</ion-label></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="heading">Username</ion-label>
+      </ion-col>
+      <ion-col> dummy.user </ion-col>
+    </ion-row>
+    <!-- <ion-row>
+      <ion-col>
+        <ion-label class="heading">Email ID</ion-label>
+      </ion-col>
+      <ion-col> dummy.user@example.com </ion-col>
+    </ion-row> -->
+    <ion-row>
+      <ion-col>
+        <ion-label class="heading">Mobile Number</ion-label>
+      </ion-col>
+      <ion-col> 98XXX XXXXX </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="heading">Current Role</ion-label>
+      </ion-col>
+      <ion-col> Account Admin </ion-col>
+    </ion-row>
+    <ion-row> &nbsp; </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="heading">Account Name</ion-label>
+      </ion-col>
+      <ion-col> Scoops & Joy </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="heading">Account Type</ion-label>
+      </ion-col>
+      <ion-col> -- </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label class="heading">Account Users</ion-label>
+      </ion-col>
+      <ion-col> Max 5 </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-label> Version 1.0.5 </ion-label>
+  </ion-toolbar>
+</ion-footer>
