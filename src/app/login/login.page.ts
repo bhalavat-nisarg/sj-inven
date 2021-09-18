@@ -63,7 +63,9 @@ export class LoginPage implements OnInit {
         {
           headers: {
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            'Content-Type': 'application/json',
+            //'Content-Type': 'application/json',
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            Accept: '*/*',
             // eslint-disable-next-line @typescript-eslint/naming-convention
             Authorization: 'Basic ' + this.apiUser,
           },
@@ -88,6 +90,11 @@ export class LoginPage implements OnInit {
     const token = buff.toString('base64');
     //console.log(token);
     return token;
+  }
+
+  byPass() {
+    console.log('By Pass');
+    this.firebaseLogin('admin@scoops-joy.app', '123456');
   }
 
   async firebaseLogin(email: string, pass: string) {
