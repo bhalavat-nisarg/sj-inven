@@ -3,7 +3,7 @@ import { AlertController, MenuController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 
 import firebase from 'firebase/app';
-import 'firebase/firestore';
+import 'firebase/auth';
 
 @Component({
   selector: 'app-root',
@@ -100,8 +100,14 @@ export class AppComponent {
   //   this.menuCtrl.close();
   // }
 
-  logout() {
-    this.navCtrl.navigateRoot('/login');
+  async logout() {
+    await firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        this.navCtrl.navigateRoot('/login');
+      })
+      .catch((error) => console.log(error));
     this.menuCtrl.close();
   }
 
