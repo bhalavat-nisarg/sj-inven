@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController, NavController } from '@ionic/angular';
 
+import * as Firebase from 'firebase/app';
+import 'firebase/firestore';
+
 @Component({
   selector: 'app-category',
   templateUrl: './category.page.html',
@@ -23,6 +26,7 @@ export class CategoryPage implements OnInit {
 
   searchBar: any;
   items: any;
+  firebase = Firebase.default;
 
   constructor(
     private navCtrl: NavController,
@@ -40,12 +44,37 @@ export class CategoryPage implements OnInit {
       })
     ).present();
 
-    this.loadingDummy();
+    // this.loadingDummy();
+    this.getCategory();
     this.searchBar.addEventListener('ionInput', this.handleInput);
   }
 
   goToInventory() {
     this.navCtrl.navigateBack('/inventory');
+  }
+
+  getCategory() {
+    this.firebase
+      .firestore()
+      .collection('category')
+      .orderBy('catCode')
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((docRecord) => {
+          this.inCategory.push({
+            catCode: docRecord.get('catCode'),
+            catDesc: docRecord.get('catDesc'),
+            startDate: docRecord.get('startDate'),
+            endDate: docRecord.get('endDate'),
+            createdBy: docRecord.get('createdBy'),
+            createDate: docRecord.get('createDate'),
+            lastUpdateDate: docRecord.get('lastUpdateDate'),
+            lastUpdatedBy: docRecord.get('lastUpdatedBy'),
+            imgUrl: '../../assets/extras/ice-def.png',
+          });
+        });
+      })
+      .catch((error) => console.log(error));
   }
 
   loadingDummy() {

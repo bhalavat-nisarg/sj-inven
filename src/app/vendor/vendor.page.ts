@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
+
+import * as Firebase from 'firebase/app';
+import 'firebase/firestore';
 
 @Component({
   selector: 'app-vendor',
@@ -32,10 +35,13 @@ export class VendorPage implements OnInit {
   source: string;
   btnClick: boolean;
 
+  firebase = Firebase.default;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private alertCtrl: AlertController
   ) {
     this.route.queryParams.subscribe(() => {
       if (this.router.getCurrentNavigation().extras.state) {
@@ -47,28 +53,17 @@ export class VendorPage implements OnInit {
 
   ngOnInit() {
     console.log(this.vendor);
-    this.loadDummy();
+    //this.loadDummy();
     this.btnClick = false;
   }
 
-  closeVendor() {
-    if (this.btnClick === true) {
-      // TODO: update status to DB
-      if (this.source === 'suppliers') {
-        this.navCtrl.navigateBack('/suppliers');
-      } else if (this.source === 'customers') {
-        this.navCtrl.navigateBack('/customers');
-      } else {
-        this.navCtrl.navigateRoot('/home');
-      }
+  async closeVendor() {
+    if (this.source === 'supplier') {
+      this.navCtrl.navigateBack('/suppliers');
+    } else if (this.source === 'customer') {
+      this.navCtrl.navigateBack('/customers');
     } else {
-      if (this.source === 'supplier') {
-        this.navCtrl.navigateBack('/suppliers');
-      } else if (this.source === 'customer') {
-        this.navCtrl.navigateBack('/customers');
-      } else {
-        this.navCtrl.navigateRoot('/home');
-      }
+      this.navCtrl.navigateRoot('/home');
     }
   }
 
@@ -99,12 +94,58 @@ export class VendorPage implements OnInit {
     };
   }
 
-  toggleStatus() {
+  async toggleStatus() {
     this.btnClick = true;
     if (this.vendor.status === 'Active') {
-      this.vendor.status = 'Inactive';
+      (
+        await this.alertCtrl.create({
+          header: 'Confirm Action',
+          subHeader:
+            'Are you sure you want to disable this' + this.source + '?',
+          buttons: [
+            {
+              text: 'cancel',
+              role: 'cancel',
+            },
+            {
+              text: 'okay',
+              role: 'submit',
+              handler: () => {
+                this.vendor.status = 'Inactive';
+                this.toggleFirebase('Inactive');
+              },
+            },
+          ],
+        })
+      ).present();
     } else if (this.vendor.status === 'Inactive') {
       this.vendor.status = 'Active';
+      this.toggleFirebase('Active');
     }
+  }
+
+  async toggleFirebase(statusVal: string) {
+    let docId: string;
+    await this.firebase
+      .firestore()
+      .collection('vendors')
+      .where('vendorId', '==', this.vendor.vendorId)
+      .get()
+      .then((querySnap) => {
+        querySnap.forEach((doc) => {
+          docId = doc.id;
+          console.log(doc.id);
+        });
+      })
+      .catch((error) => console.log(error));
+
+    await this.firebase
+      .firestore()
+      .collection('vendors')
+      .doc(docId)
+      .update({
+        status: statusVal,
+      })
+      .catch((error) => console.log(error));
   }
 }

@@ -23,6 +23,13 @@
       <ion-item button detail (click)="toVendor(supp)">
         <ion-icon name="business-outline" slot="start" color="dark"> </ion-icon>
         <ion-label class="ion-text-wrap"> {{ supp.vendorName }} </ion-label>
+        <span
+          *ngIf="supp.status==='Inactive'"
+          slot="end"
+          class="ion-padding-end"
+        >
+          <ion-icon name="ban-outline" color="danger"></ion-icon>
+        </span>
       </ion-item>
     </ion-list>
   </div>

@@ -10,206 +10,6 @@
     </div>
   </ion-toolbar>
 </ion-header>
-<!-- 
-<ion-content class="ion-padding-bottom">
-  <ion-item>
-    <ion-progress-bar value="0.25"></ion-progress-bar>
-  </ion-item>
-  <ion-grid class="ion-padding">
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Vendor Name</ion-label>
-          <ion-input
-            [(ngModel)]="inVendor.vendorName"
-            inputmode="text"
-            maxlength="50"
-            type="text"
-            placeholder="Vendor Name"
-            required
-          >
-          </ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Address Line 1</ion-label>
-          <ion-input
-            [(ngModel)]="inVendor.address1"
-            inputmode="text"
-            maxlength="30"
-            type="text"
-            placeholder="Address Line 1"
-            required
-          >
-          </ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Address Line 2</ion-label>
-          <ion-input
-            [(ngModel)]="inVendor.address2"
-            inputmode="text"
-            maxlength="30"
-            type="text"
-            placeholder="Address Line 2"
-          >
-          </ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Address Line 3</ion-label>
-          <ion-input
-            [(ngModel)]="inVendor.address3"
-            inputmode="text"
-            maxlength="30"
-            type="text"
-            placeholder="Address Line 3"
-          >
-          </ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <ion-footer style="padding: 5px">
-    <ion-button expand="full" color="danger">
-      Disable
-      <ion-icon name="eye-off" slot="start"></ion-icon>
-    </ion-button>
-    <ion-button expand="full" color="danger">
-      Disable
-      <ion-icon name="eye-off" slot="start"></ion-icon>
-    </ion-button>
-  </ion-footer>
-</ion-content>
-
-<ion-content class="ion-padding-bottom" *ngIf="visibleSection === 'b'">
-  <ion-item>
-    <ion-progress-bar value="0.5"></ion-progress-bar>
-  </ion-item>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">GST Number</ion-label>
-          <ion-input
-            [(ngModel)]="inVendor.gst"
-            type="text"
-            inputmode="text"
-            maxlength="15"
-          >
-          </ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Pincode</ion-label>
-          <ion-input
-            [(ngModel)]="inVendor.pincode"
-            type="text"
-            inputmode="number"
-            maxlength="6"
-            id="pincode"
-          >
-          </ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">City</ion-label>
-          <ion-input
-            [(ngModel)]="inVendor.city"
-            inputmode="text"
-            maxlength="35"
-          >
-          </ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">State</ion-label>
-          <ion-input
-            [(ngModel)]="inVendor.state"
-            inputmode="text"
-            type="text"
-            maxlength="45"
-          >
-          </ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Country</ion-label>
-          <ion-input
-            [(ngModel)]="inVendor.country"
-            inputmode="text"
-            type="text"
-            maxlength="20"
-          >
-          </ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Email</ion-label>
-          <ion-input
-            [(ngModel)]="inVendor.email"
-            inputmode="email"
-            type="email"
-            maxlength="30"
-          >
-          </ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Mobile</ion-label>
-          <ion-input
-            [(ngModel)]="inVendor.mobile"
-            inputmode="number"
-            type="text"
-            maxlength="10"
-          >
-          </ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Comments/Description</ion-label>
-          <ion-textarea
-            [(ngModel)]="inVendor.description"
-            inputmode="text"
-            type="text"
-            maxlength="250"
-          >
-          </ion-textarea>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content> -->
 
 <ion-content class="ion-no-padding">
   <div class="part-a" *ngIf="visibleSection === 'part-a'">
@@ -218,7 +18,9 @@
     </ion-list-header>
     <ion-list class="ion-padding" lines="full">
       <ion-item>
-        <ion-label position="floating">Vendor Name</ion-label>
+        <ion-label position="floating">
+          Vendor Name <span class="mandate-star"> * </span>
+        </ion-label>
         <ion-input
           type="text"
           inputmode="text"
@@ -228,7 +30,9 @@
         ></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Address Line 1</ion-label>
+        <ion-label position="floating">
+          Address Line 1 <span class="mandate-star"> * </span>
+        </ion-label>
         <ion-input
           type="text"
           inputmode="text"
@@ -238,7 +42,7 @@
         ></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Address Line 2</ion-label>
+        <ion-label position="floating"> Address Line 2 </ion-label>
         <ion-input
           type="text"
           inputmode="text"
@@ -247,7 +51,7 @@
         ></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Address Line 3</ion-label>
+        <ion-label position="floating"> Address Line 3 </ion-label>
         <ion-input
           type="text"
           inputmode="text"
@@ -256,7 +60,9 @@
         ></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Pincode</ion-label>
+        <ion-label position="floating">
+          Pincode <span class="mandate-star"> * </span>
+        </ion-label>
         <ion-input
           type="text"
           inputmode="number"
@@ -264,23 +70,100 @@
           [(ngModel)]="inVendor.pincode"
         ></ion-input>
       </ion-item>
+      <ion-item>
+        <ion-label position="floating"> GST Number </ion-label>
+        <ion-input
+          type="text"
+          inputmode="text"
+          maxlength="25"
+          [(ngModel)]="inVendor.gst"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating"> Mobile Number </ion-label>
+        <ion-input
+          type="text"
+          inputmode="number"
+          maxlength="10"
+          [(ngModel)]="inVendor.mobile"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Email ID </ion-label>
+        <ion-input
+          type="email"
+          inputmode="email"
+          maxlength="45"
+          [(ngModel)]="inVendor.email"
+        ></ion-input>
+      </ion-item>
+    </ion-list>
+  </div>
+  <div class="part-b" *ngIf="visibleSection === 'part-b'">
+    <ion-list class="ion-padding" lines="full">
+      <ion-item>
+        <ion-label position="floating">
+          City <span class="mandate-star"> * </span>
+        </ion-label>
+        <ion-input
+          type="text"
+          inputmode="text"
+          maxlength="45"
+          [(ngModel)]="inVendor.city"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">
+          State <span class="mandate-star"> * </span>
+        </ion-label>
+        <ion-input
+          type="text"
+          inputmode="text"
+          maxlength="45"
+          [(ngModel)]="inVendor.state"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">
+          Country <span class="mandate-star"> * </span>
+        </ion-label>
+        <ion-input
+          type="text"
+          inputmode="text"
+          maxlength="35"
+          [(ngModel)]="inVendor.country"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating"> Status </ion-label>
+        <ion-input
+          type="text"
+          inputmode="text"
+          maxlength="15"
+          [(ngModel)]="inVendor.status"
+          readonly
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating"> Comments / Description </ion-label>
+        <ion-textarea
+          type="text"
+          inputmode="text"
+          maxlength="250"
+          rows="6"
+          cols="20"
+          [(ngModel)]="inVendor.description"
+        ></ion-textarea>
+      </ion-item>
     </ion-list>
   </div>
 </ion-content>
 
-<ion-footer *ngIf="visibleSection ==='part-a'">
-  <ion-button id="cancel" fill="clear" (click)="onCancelBtn()">
-    Cancel
+<ion-footer>
+  <ion-button id="cancel" fill="outline" (click)="onPrevBtn()">
+    {{backBtn}}
   </ion-button>
   <ion-button id="preview" fill="outline" (click)="onNextBtn()">
-    Next
-  </ion-button>
-</ion-footer>
-<ion-footer *ngIf="visibleSection ==='part-b'">
-  <ion-button id="cancel" fill="outline" (click)="onPrevBtn()">
-    Back
-  </ion-button>
-  <ion-button id="preview" fill="outline" (click)="onSubmitBtn()">
-    Submit
+    {{nextBtn}}
   </ion-button>
 </ion-footer>

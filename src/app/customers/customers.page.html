@@ -1,9 +1,36 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>customers</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button id="content"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center"> Customers </ion-title>
+    <ion-buttons slot="end" (click)="addNewCustomers()">
+      <ion-icon name="add" class="end-icon-btn ion-padding-end"></ion-icon>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-searchbar showcancelbutton="focus"> </ion-searchbar>
+<ion-content class="ion-padding-bottom">
+  <div *ngIf="customers.length === 0">
+    <ion-label><h5 class="text-muted">No Suppliers to Show</h5></ion-label>
+  </div>
+  <div *ngIf="customers.length > 0" class="padding-bottom">
+    <ion-label>
+      <h5 class="text-muted">Total {{customers.length}} Suppliers</h5>
+    </ion-label>
+    <ion-list *ngFor="let cust of customers" class="custList">
+      <ion-item button detail (click)="toVendor(cust)">
+        <ion-icon name="business-outline" slot="start" color="dark"> </ion-icon>
+        <ion-label class="ion-text-wrap"> {{ cust.vendorName }} </ion-label>
+        <span
+          *ngIf="cust.status==='Inactive'"
+          slot="end"
+          class="ion-padding-end"
+        >
+          <ion-icon name="ban-outline" color="danger"></ion-icon>
+        </span>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>

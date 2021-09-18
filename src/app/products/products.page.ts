@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
-import { Storage } from '@ionic/storage-angular';
-
-import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-products',
@@ -31,8 +28,7 @@ export class ProductsPage implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private navCtrl: NavController,
-    private storage: Storage
+    private navCtrl: NavController
   ) {
     this.route.queryParams.subscribe(() => {
       if (this.router.getCurrentNavigation().extras.state) {
@@ -43,23 +39,23 @@ export class ProductsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.inProducts = {
-      productCode: 10001,
-      productName: 'Rich Chocolate',
-      catCode: 'C001',
-      mrp: 25.0,
-      purPrice: 0.0,
-      selPrice: 25.5,
-      qty: 0,
-      startDate: '01 Aug 2021',
-      endDate: '31 Dec 4712',
-      createdBy: '-1',
-      createDate: '01 Aug 2021',
-      lastUpdateDate: '01 Aug 2021',
-      lastUpdatedBy: '-1',
-      imgUrl: '../../assets/extras/ice-def.png',
-    };
-    console.log(this.inProducts);
+    // this.inProducts = {
+    //   productCode: 10001,
+    //   productName: 'Rich Chocolate',
+    //   catCode: 'C001',
+    //   mrp: 25.0,
+    //   purPrice: 0.0,
+    //   selPrice: 25.5,
+    //   qty: 0,
+    //   startDate: '01 Aug 2021',
+    //   endDate: '31 Dec 4712',
+    //   createdBy: '-1',
+    //   createDate: '01 Aug 2021',
+    //   lastUpdateDate: '01 Aug 2021',
+    //   lastUpdatedBy: '-1',
+    //   imgUrl: '../../assets/extras/ice-def.png',
+    // };
+    // console.log(this.inProducts);
   }
 
   goToInventory() {

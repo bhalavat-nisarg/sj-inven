@@ -22,26 +22,17 @@
     <ion-label>
       <h5 class="text-muted">Total {{inProducts.length}} Products</h5>
     </ion-label>
-    <ion-list *ngFor="let prod of inProducts" class="catList">
-      <ion-item lines="none" class="text-header">
-        <ion-label class="ion-text-wrap">Product Name</ion-label>
-        <ion-label class="ion-text-wrap">Quantity</ion-label>
-        <!-- <ion-label class="ion-text-wrap">MRP</ion-label>
-        <ion-label class="ion-text-wrap">Purchase Price</ion-label> -->
-        <!-- <ion-label class="ion-text-wrap">Selling Price</ion-label> -->
-      </ion-item>
-
+    <ion-item lines="none" class="text-header">
+      <ion-label class="ion-text-wrap">Product Name</ion-label>
+      <ion-label class="ion-text-wrap">Quantity</ion-label>
+      <!-- <ion-label class="ion-text-wrap">MRP</ion-label>
+      <ion-label class="ion-text-wrap">Purchase Price</ion-label> -->
+      <!-- <ion-label class="ion-text-wrap">Selling Price</ion-label> -->
+    </ion-item>
+    <ion-list *ngFor="let prod of inProducts" class="catList list-text">
       <ion-item detail button (click)="goToProducts(prod)">
-        <!-- <ion-thumbnail slot="start">
-          <ion-img src="{{prod.imgUrl}}"></ion-img>
-        </ion-thumbnail> -->
         <ion-label class="ion-text-wrap">{{prod.productName}}</ion-label>
         <ion-label class="ion-text-wrap">&nbsp; &nbsp; {{prod.qty}}</ion-label>
-        <!-- <ion-label class="ion-text-wrap">&#8377; {{prod.mrp}}</ion-label>
-        <ion-label class="ion-text-wrap">&#8377; {{prod.purPrice}}</ion-label> -->
-        <!-- <ion-label class="ion-text-wrap">
-          &#8377; {{prod.selPrice | number : '1.2-2'}}
-        </ion-label> -->
       </ion-item>
     </ion-list>
   </div>

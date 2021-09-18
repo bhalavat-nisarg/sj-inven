@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
 
+import * as Firebase from 'firebase/app';
+import 'firebase/firestore';
+
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.page.html',
@@ -31,6 +34,8 @@ export class InventoryPage implements OnInit {
   items: any;
 
   productPage: boolean;
+
+  firebase = Firebase.default;
 
   constructor(
     private navCtrl: NavController,
@@ -62,7 +67,8 @@ export class InventoryPage implements OnInit {
     if (this.productPage === false) {
       console.log('Not from Product Page');
     }
-    this.loadingDummy();
+    //this.loadingDummy();
+    this.getProducts();
     this.searchBar.addEventListener('ionInput', this.handleInput);
   }
 
@@ -78,6 +84,35 @@ export class InventoryPage implements OnInit {
     };
 
     this.navCtrl.navigateForward('/products', navigateExtras);
+  }
+
+  getProducts() {
+    this.firebase
+      .firestore()
+      .collection('products')
+      .orderBy('productCode')
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((docRecord) => {
+          this.inProducts.push({
+            productCode: docRecord.get('productCode'),
+            productName: docRecord.get('productName'),
+            catCode: docRecord.get('catCode'),
+            mrp: docRecord.get('mrp'),
+            purPrice: docRecord.get('purPrice'),
+            selPrice: docRecord.get('selPrice'),
+            qty: docRecord.get('qty'),
+            startDate: docRecord.get('startDate'),
+            endDate: docRecord.get('endDate'),
+            createdBy: docRecord.get('createdBy'),
+            createDate: docRecord.get('createDate'),
+            lastUpdateDate: docRecord.get('lastUpdateDate'),
+            lastUpdatedBy: docRecord.get('lastUpdatedBy'),
+            imgUrl: '../../assets/extras/ice-def.png',
+          });
+        });
+      })
+      .catch((error) => console.log(error));
   }
 
   loadingDummy() {
@@ -103,7 +138,7 @@ export class InventoryPage implements OnInit {
 
   handleInput(event) {
     // search Bar
-    this.items = Array.from(document.querySelectorAll('.prodList'));
+    this.items = Array.from(document.querySelectorAll('.catList'));
     // this.items = Array.from(document.querySelector('.prodList').children);
 
     const query = event.srcElement.value.toLowerCase();

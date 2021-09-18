@@ -9,6 +9,9 @@
     color: #333333;
   }
   ion-item {
+    .mandate-star {
+      color: firebrick !important;
+    }
     padding: 5px;
     color: #333333;
     ion-label {
