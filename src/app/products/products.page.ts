@@ -30,8 +30,8 @@ export class ProductsPage implements OnInit {
 
   constructor(
     private router: Router,
-    private navCtrl: NavController,
     private route: ActivatedRoute,
+    private navCtrl: NavController,
     private storage: Storage
   ) {
     this.route.queryParams.subscribe(() => {

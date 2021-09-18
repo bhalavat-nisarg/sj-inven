@@ -4,7 +4,7 @@
       <ion-menu-button id="content"></ion-menu-button>
     </ion-buttons>
     <ion-title class="ion-text-center">My Users </ion-title>
-    <ion-buttons slot="end" (click)="add()">
+    <ion-buttons slot="end" (click)="addNewUser()">
       <ion-icon
         name="person-add"
         class="end-icon-btn ion-padding-end"
@@ -24,14 +24,14 @@
         Total {{users.length}} users in your organization
       </h5>
     </ion-label>
-    <ion-list *ngFor="let usr of users" class="prodList">
-      <ion-item button detail>
+    <ion-list *ngFor="let usr of users" class="userList">
+      <ion-item button detail (click)="onClick(usr)">
         <ion-icon
           name="person-circle-outline"
           slot="start"
           color="dark"
         ></ion-icon>
-        <ion-label class="ion-text-wrap"> {{ usr.name }} </ion-label>
+        <ion-label class="ion-text-wrap"> {{ usr.fullName }} </ion-label>
       </ion-item>
     </ion-list>
   </div>

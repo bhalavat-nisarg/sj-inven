@@ -1,8 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button id="content"></ion-menu-button>
+    <ion-buttons slot="start" (click)="onCancel()">
+      <ion-icon name="close" class="end-icon-btn ion-padding-start"></ion-icon>
     </ion-buttons>
+    <!-- <ion-buttons slot="start">
+      <ion-menu-button id="content"></ion-menu-button>
+    </ion-buttons> -->
     <ion-title class="ion-text-center">Add New User </ion-title>
     <ion-buttons slot="end" (click)="create()">
       <ion-icon
@@ -22,12 +25,12 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label position="floating">Username</ion-label>
+          <ion-label position="floating"> Full Name </ion-label>
           <ion-input
             type="text"
             inputmode="text"
-            [(ngModel)]="userInfo.username"
-            maxlength="25"
+            [(ngModel)]="userInfo.fullName"
+            maxlength="45"
             required
           >
           </ion-input>
@@ -37,11 +40,12 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label position="floating">Email</ion-label>
+          <ion-label position="floating"> Username </ion-label>
           <ion-input
-            type="email"
-            inputmode="email"
-            [(ngModel)]="userInfo.email"
+            type="text"
+            inputmode="text"
+            maxlength="15"
+            [(ngModel)]="userInfo.username"
             required
           ></ion-input>
         </ion-item>
@@ -49,8 +53,18 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-item>
-          <ion-label position="floating">Password</ion-label>
+        <ion-item *ngIf="edit">
+          <ion-label position="floating"> Password </ion-label>
+          <ion-input
+            type="password"
+            inputmode="password"
+            [(ngModel)]="userInfo.password"
+            disabled
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item *ngIf="!edit">
+          <ion-label position="floating"> Password </ion-label>
           <ion-input
             type="password"
             inputmode="password"
@@ -76,7 +90,7 @@
     </ion-row> -->
   </ion-grid>
 </ion-content>
-<ion-footer class="ion-padding">
+<ion-footer class="ion-padding" *ngIf="!edit">
   <ion-button size="normal" fill="clear" color="danger" (click)="onCancel()">
     Cancel
   </ion-button>
@@ -87,6 +101,20 @@
     style="float: right"
     (click)="create()"
   >
-    Create
+    Add User
+  </ion-button>
+</ion-footer>
+<ion-footer class="ion-padding" *ngIf="edit">
+  <ion-button size="normal" fill="outline" color="success" (click)="onCancel()">
+    Cancel
+  </ion-button>
+  <ion-button
+    size="normal"
+    fill="outline"
+    color="danger"
+    style="float: right"
+    (click)="deleteUser()"
+  >
+    Delete User
   </ion-button>
 </ion-footer>

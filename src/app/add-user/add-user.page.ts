@@ -1,15 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationExtras, Router, ActivatedRoute } from '@angular/router';
 import {
   AlertController,
+  LoadingController,
   NavController,
   ToastController,
 } from '@ionic/angular';
+import { Storage } from '@ionic/storage-angular';
+import { Buffer } from 'buffer';
+import { GlobalConstants } from '../common/global';
 
+import * as axiosMain from 'axios';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
-
-import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-add-user',
@@ -23,35 +27,66 @@ export class AddUserPage implements OnInit {
     password: '',
     username: '',
     role: 5,
+    fullName: '',
   };
 
-  masterPass: string;
-  masterEmail: string;
+  axios = axiosMain.default;
 
-  createdUser: any;
-  createdUserEmail: string;
+  apiUser = GlobalConstants.apiKey;
+  createURL = GlobalConstants.apiURL + '/sj/auth/add-user';
+  deleteURL = GlobalConstants.apiURL + '/sj/auth/delete-user';
+
+  totalUsers: number;
+  accountUsers: number;
+  edit = false;
+  addingAllowed: boolean;
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private toastCtrl: ToastController,
     private navCtrl: NavController,
     private alertCtrl: AlertController,
-    private storage: Storage
+    private loadingCtrl: LoadingController
   ) {
-    this.storage.get('email').then((val) => {
-      this.masterEmail = val;
+    this.route.queryParams.subscribe(() => {
+      if (this.router.getCurrentNavigation().extras.state) {
+        this.accountUsers =
+          this.router.getCurrentNavigation().extras.state.accUsers;
+        this.totalUsers =
+          this.router.getCurrentNavigation().extras.state.usersCnt;
+        this.edit = this.router.getCurrentNavigation().extras.state.edit;
+        if (this.edit) {
+          this.userInfo.uid =
+            this.router.getCurrentNavigation().extras.state.userVal.uid;
+          this.userInfo.fullName =
+            this.router.getCurrentNavigation().extras.state.userVal.fullName;
+          this.userInfo.username =
+            this.router.getCurrentNavigation().extras.state.userVal.username;
+          this.userInfo.role =
+            this.router.getCurrentNavigation().extras.state.userVal.role;
+        }
+      }
     });
   }
 
   ngOnInit() {
-    this.createdUser = firebase.auth().currentUser;
+    console.log(this.accountUsers - this.totalUsers);
   }
 
   async create() {
     if (
-      // this.userInfo.email === '' ||
-      // this.userInfo.password === '' ||
-      //this.userInfo.username === ''
-      false
+      this.accountUsers - this.totalUsers !== 0 &&
+      this.accountUsers - this.totalUsers > 0 &&
+      this.totalUsers <= this.accountUsers
+    ) {
+      this.addingAllowed = true;
+    }
+    if (
+      this.userInfo.fullName === '' ||
+      this.userInfo.password === '' ||
+      this.userInfo.username === '' ||
+      this.userInfo.role === 5
     ) {
       (
         await this.toastCtrl.create({
@@ -60,35 +95,23 @@ export class AddUserPage implements OnInit {
           duration: 3000,
         })
       ).present();
+    } else if (this.addingAllowed) {
+      this.addNewUser();
     } else {
       (
         await this.alertCtrl.create({
-          header: 'Verify Yourself',
-          inputs: [
-            {
-              type: 'password',
-              placeholder: 'Enter Password',
-              name: 'Password',
-              value: '',
-            },
-          ],
+          header: 'Invalid',
+          subHeader: 'User limit reached..',
           buttons: [
             {
-              text: 'cancel',
+              text: 'Cancel',
               role: 'cancel',
-              handler: () => {
-                this.userInfo.username = '';
-                this.userInfo.password = '';
-                this.userInfo.email = '';
-                this.userInfo.role = 5;
-              },
             },
             {
-              text: 'okay',
+              text: 'Okay',
               role: 'submit',
-              handler: (data) => {
-                this.masterPass = data.Password;
-                this.createAndLogin();
+              handler: () => {
+                this.navCtrl.navigateBack('/users');
               },
             },
           ],
@@ -98,82 +121,133 @@ export class AddUserPage implements OnInit {
   }
 
   onCancel() {
-    if (this.masterPass === 'invalid') {
-      this.navCtrl.navigateRoot('/login');
-    } else {
-      this.navCtrl.navigateBack('/users');
-    }
+    this.navCtrl.navigateBack('/users');
   }
 
-  async createAndLogin() {
-    // console.log(this.masterEmail, this.masterPass);
+  async deleteUser() {
+    console.log('Delete user ' + this.userInfo.uid);
+    (
+      await this.alertCtrl.create({
+        header: 'Delete User',
+        subHeader: 'Are you sure? This action can not be undone.',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+          },
+          {
+            text: 'Okay',
+            role: 'submit',
+            handler: () => {
+              this.firebaseDelete(this.userInfo.uid);
+            },
+          },
+        ],
+      })
+    ).present();
+  }
 
-    await firebase
-      .auth()
-      .createUserWithEmailAndPassword(
-        this.userInfo.email,
-        this.userInfo.password
+  async firebaseDelete(uid) {
+    (
+      await this.loadingCtrl.create({
+        message: 'Please Wait..',
+        duration: 3000,
+      })
+    ).present();
+    console.log(uid);
+    this.axios
+      .post(
+        this.deleteURL,
+        {
+          uid,
+        },
+        {
+          headers: {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            'Content-Type': 'application/json',
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            Authorization: 'Basic ' + this.apiUser,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        this.userInfo.uid = response.data.uid;
+
+        const navigateExtras: NavigationExtras = {
+          state: {
+            operate: true,
+          },
+        };
+
+        this.navCtrl.navigateBack('/users', navigateExtras);
+      });
+  }
+
+  async addNewUser() {
+    (
+      await this.loadingCtrl.create({
+        message: 'Please Wait..',
+        duration: 3000,
+      })
+    ).present();
+    console.log(this.userInfo);
+    this.userInfo.email = this.userInfo.username + '@scoops-joy.app';
+    const token = this.encodeBase64(
+      this.userInfo.username,
+      this.userInfo.password
+    );
+    await this.axios
+      .post(
+        this.createURL,
+        {
+          email: this.userInfo.email,
+          token,
+          username: this.userInfo.username,
+          role: this.userInfo.role,
+          fullName: this.userInfo.fullName,
+        },
+        {
+          headers: {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            'Content-Type': 'application/json',
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            Authorization: 'Basic ' + this.apiUser,
+          },
+        }
       )
       .then(async (response) => {
-        this.userInfo.uid = response.user.uid;
-        console.log(this.userInfo);
-      })
-      .catch(async (err) => {
+        console.log(response.data);
+        this.userInfo.uid = response.data.uid;
         (
-          await this.toastCtrl.create({
-            message: err.message,
-            duration: 3000,
-          })
-        ).present();
-      });
+          await this.alertCtrl.create({
+            header: 'Success',
+            subHeader: 'User Created!',
+            buttons: [
+              {
+                text: 'Okay',
+                role: 'submit',
+                handler: () => {
+                  const navigateExtras: NavigationExtras = {
+                    state: {
+                      operate: true,
+                    },
+                  };
 
-    this.createdUser = firebase.auth().currentUser;
-    this.createdUserEmail = firebase.auth().currentUser.email;
-
-    await firebase.auth().signOut();
-    await this.signInMaster();
-  }
-
-  async signInMaster() {
-    await firebase
-      .auth()
-      .signInWithEmailAndPassword(this.masterEmail, this.masterPass)
-      .then(async () => {
-        await firebase
-          .firestore()
-          .collection('users')
-          .add({
-            uid: this.userInfo.uid,
-            username: this.userInfo.username,
-            email: this.userInfo.email,
-            role: this.userInfo.role,
-          })
-          .then(() => {
-            this.navCtrl.pop();
-          })
-          .catch((err) => {
-            console.log(err.message);
-          });
-      })
-      .catch(async () => {
-        if (this.createdUserEmail !== 'abcd@gmail.com') {
-          this.createdUser.delete().then(() => {
-            console.log('user removed');
-          });
-        }
-        this.masterPass = 'invalid';
-        (
-          await this.toastCtrl.create({
-            message: 'Invalid Credentials',
-            duration: 3000,
+                  this.navCtrl.navigateBack('/users', navigateExtras);
+                },
+              },
+            ],
           })
         ).present();
       });
   }
 
-  ionViewDidLeave() {
-    if (this.masterPass === 'invalid') {
-      this.navCtrl.navigateRoot('/login');
-    }
+  encodeBase64(username: string, password: string) {
+    const inputText = username + ':' + password;
+    const buff = Buffer.from(inputText, 'utf8');
+    const token = buff.toString('base64');
+    //console.log(token);
+    return token;
   }
 }
