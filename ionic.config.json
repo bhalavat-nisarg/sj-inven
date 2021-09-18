@@ -1,5 +1,7 @@
 {
   "name": "sj-inven",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }
