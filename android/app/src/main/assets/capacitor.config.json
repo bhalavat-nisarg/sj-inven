@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "sj-inven",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
