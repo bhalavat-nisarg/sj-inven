@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-invoices',
@@ -6,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./invoices.page.scss'],
 })
 export class InvoicesPage implements OnInit {
-  constructor() {}
+  constructor(private navCtrl: NavController) {}
 
   ngOnInit() {}
+
+  createInvoice() {
+    this.navCtrl.navigateForward('/invoice-header');
+  }
 }

@@ -84,6 +84,10 @@ const routes: Routes = [
         (m) => m.NewVendorPageModule
       ),
   },
+  {
+    path: 'invoice-header',
+    loadChildren: () => import('./invoice-header/invoice-header.module').then( m => m.InvoiceHeaderPageModule)
+  },
 ];
 
 @NgModule({
