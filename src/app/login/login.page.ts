@@ -92,11 +92,6 @@ export class LoginPage implements OnInit {
     return token;
   }
 
-  byPass() {
-    console.log('By Pass');
-    this.firebaseLogin('admin@scoops-joy.app', '123456');
-  }
-
   async firebaseLogin(email: string, pass: string) {
     await firebase
       .auth()

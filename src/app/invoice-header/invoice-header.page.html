@@ -4,10 +4,22 @@
       <ion-icon
         name="close"
         class="end-icon-btn ion-padding-start"
-        (click)="onCancel()"
+        (click)="onBack()"
+        *ngIf="pageView === 'header'"
+      ></ion-icon>
+      <ion-icon
+        name="arrow-back"
+        class="end-icon-btn ion-padding-start"
+        (click)="onBack()"
+        *ngIf="pageView !== 'header'"
       ></ion-icon>
     </ion-buttons>
-    <ion-title class="ion-text-center"> Add New invoice </ion-title>
+    <ion-title class="ion-text-center" *ngIf="pageView === 'header'">
+      Add New invoice
+    </ion-title>
+    <ion-title class="ion-text-center" *ngIf="pageView === 'lines'">
+      {{invHead.invNumber}}
+    </ion-title>
     <ion-buttons slot="end">
       <ion-icon
         name="arrow-forward"
@@ -30,7 +42,7 @@
             <ion-select
               interface="popover"
               [(ngModel)]="invHead.invType"
-              required
+              disabled
             >
               <ion-select-option value="purchase"> Purchase </ion-select-option>
               <ion-select-option value="sales"> Sales </ion-select-option>
@@ -85,8 +97,8 @@
               required
             >
               <ion-select-option
-                value="{{vend.vendorId}}"
                 *ngFor="let vend of inVendor"
+                value="{{vend.vendorId}}"
               >
                 {{vend.vendorName}}
               </ion-select-option>
@@ -128,16 +140,19 @@
               required
               min="0"
             >
+              <span *ngIf="invHead.invAmt && invHead.invCurr">
+                &#8377; &nbsp;
+              </span>
             </ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item>
-            <ion-label position="floating"> Total Quantity </ion-label>
+            <ion-label position="floating"> Total Products </ion-label>
             <ion-input
               type="number"
               inputmode="number"
-              [(ngModel)]="invHead.invQty"
+              [(ngModel)]="invHead.invProd"
               required
               min="0"
             >
@@ -148,13 +163,139 @@
       <ion-row>
         <ion-col aria-colspan="2">
           <ion-item>
-            <ion-label position="floating"> Description</ion-label>
+            <ion-label position="floating"> Description </ion-label>
             <ion-textarea
               type="text"
               inputmode="text"
               [(ngModel)]="invHead.invDesc"
               maxlength="200"
             ></ion-textarea>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div class="lines" *ngIf="pageView === 'lines'">
+    <ion-title class="ion-text-center">Invoice Lines</ion-title>
+    <ion-grid class="ion-padding-start ion-padding-end">
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating"> Line Number </ion-label>
+            <ion-input
+              type="number"
+              inputmode="number"
+              [(ngModel)]="invLines[pageCnt].lnNumber"
+              readonly
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating"> Line Type </ion-label>
+            <ion-input
+              type="text"
+              inputmode="text"
+              [(ngModel)]="invLines[pageCnt].lnType"
+              readonly
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating"> Category </ion-label>
+            <ion-select
+              interface="popover"
+              [(ngModel)]="invLines[pageCnt].catCode"
+            >
+              <ion-select-option
+                *ngFor="let cat of inCategory"
+                value="{{cat.catCode}}"
+              >
+                {{cat.catDesc}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating"> Product </ion-label>
+            <ion-select
+              interface="popover"
+              [(ngModel)]="invLines[pageCnt].productCode"
+            >
+              <ion-select-option
+                *ngFor="let prod of inProducts"
+                value="{{prod.productCode}}"
+              >
+                {{prod.productName}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">
+              {{source | titlecase}} Price
+            </ion-label>
+            <ion-input
+              type="number"
+              inputmode="number"
+              min="0"
+              [(ngModel)]="invLines[pageCnt].purPrice"
+              (ngModelChange)="calculateValue()"
+            >
+              <!-- <span *ngIf="currencyMarker"> &#8377; &nbsp;</span> -->
+            </ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating"> Quantity </ion-label>
+            <ion-input
+              type="number"
+              inputmode="number"
+              min="0"
+              [(ngModel)]="invLines[pageCnt].lnQty"
+              (ngModelChange)="calculateValue()"
+            >
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating"> GST </ion-label>
+            <ion-select
+              interface="popover"
+              [(ngModel)]="invLines[pageCnt].gst"
+              (ngModelChange)="calculateValue()"
+            >
+              <ion-select-option value="0"> NA </ion-select-option>
+              <ion-select-option value="5"> 5% </ion-select-option>
+              <ion-select-option value="12"> 12% </ion-select-option>
+              <ion-select-option value="18"> 18% </ion-select-option>
+              <ion-select-option value="10"> 10% </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating"> Line Total </ion-label>
+            <ion-input
+              type="number"
+              inputmode="number"
+              [(ngModel)]="invLines[pageCnt].lnAmt"
+              readonly
+            >
+              <span *ngIf="invLines[pageCnt].lnAmt"> &#8377; &nbsp; </span>
+            </ion-input>
           </ion-item>
         </ion-col>
       </ion-row>

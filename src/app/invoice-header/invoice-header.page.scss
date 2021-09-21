@@ -9,48 +9,7 @@ ion-select {
   --placeholder-opacity: 0.7;
 }
 .header,
-.part-b,
-.part-c,
-.part-d {
-  transition: ease-in-out 0.2s;
-  //   #header {
-  //     padding: 8px 32px;
-  //     background: #ff9079;
-  //     color: #333333;
-  //   }
-  //   ion-item {
-  //     .mandate-star {
-  //       color: firebrick !important;
-  //     }
-  //     padding: 5px;
-  //     color: #333333;
-  //     ion-label {
-  //       color: #5a86a1;
-  //       font-size: 16px;
-  //       span {
-  //         color: #aaa;
-  //         padding-left: 5px;
-  //       }
-  //     }
-  //     ion-buttons ion-label {
-  //       padding: 5px;
-  //     }
-  //   }
+.lines,
+.summary {
+  transition: ease-in-out 0.3s;
 }
-// ion-footer {
-//   ion-button {
-//     width: 45%;
-//   }
-//   #cancel {
-//     float: left;
-//     padding-left: 10px;
-//     --border-color: #666666;
-//     --color: #666666;
-//   }
-//   #preview {
-//     float: right;
-//     padding-right: 10px;
-//     --border-color: #5a86a1;
-//     --color: #5a86a1;
-//   }
-// }
