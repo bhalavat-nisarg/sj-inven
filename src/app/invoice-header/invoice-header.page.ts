@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import {
+  LoadingController,
+  NavController,
+  ToastController,
+} from '@ionic/angular';
 
 import * as Firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -19,22 +23,33 @@ export class InvoiceHeaderPage implements OnInit {
   vendorSource: string;
   items: any;
   currencyMarker = false;
-  invCalTotal = '';
+  invCalTotal = 0;
+  gst05 = 0;
+  gst12 = 0;
+  gst18 = 0;
   pageCnt: number;
   lastInvoice: string = null;
   lastProd: number = null;
   lastLines: any;
+  filterProducts = [
+    {
+      productCode: '',
+      productName: '',
+      catCode: '',
+      mrp: 0.0,
+    },
+  ];
 
   invHead = {
     invNumber: '',
     invDate: '',
-    vendorId: '',
+    vendorName: '',
     invAmt: 0.0,
     invProd: 0,
     invPayType: '',
     invDesc: '',
     invType: '',
-    invCurr: '',
+    invCurr: 'INR',
   };
 
   invLines = [
@@ -42,30 +57,17 @@ export class InvoiceHeaderPage implements OnInit {
       invNumber: '',
       lnNumber: 0,
       lnType: '',
-      lnDesc: '',
-      catCode: '',
-      productCode: '',
+      catDesc: '',
+      productName: '',
       purPrice: 0.0,
       lnQty: 0,
       lnAmt: '',
       lnCurr: '',
       gst: '',
+      gstAmt: '',
+      subTotal: '',
     },
   ];
-
-  sampleLine = {
-    invNumber: '',
-    lnNumber: 0,
-    lnType: '',
-    lnDesc: '',
-    catCode: '',
-    productCode: '',
-    purPrice: 0.0,
-    lnQty: 0,
-    lnAmt: '',
-    lnCurr: '',
-    gst: '',
-  };
 
   inVendor = [
     {
@@ -93,7 +95,9 @@ export class InvoiceHeaderPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController,
+    private navCtrl: NavController
   ) {
     this.route.queryParams.subscribe(() => {
       if (this.router.getCurrentNavigation().extras.state) {
@@ -108,12 +112,22 @@ export class InvoiceHeaderPage implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.pageView = 'header';
     this.pageCnt = -1;
-    console.log('Page no ' + this.pageCnt);
+    // this.pageView = 'lines';
+    // this.pageCnt = 0;
+    // this.pageView = 'summary';
+    // this.pageCnt = 2;
 
-    this.loadDummy();
+    //this.loadDummy();
+
+    (
+      await this.loadingCtrl.create({
+        message: 'Please wait..',
+        duration: 3000,
+      })
+    ).present();
 
     if (this.source === 'purchase') {
       this.vendorSource = 'supplier';
@@ -122,52 +136,93 @@ export class InvoiceHeaderPage implements OnInit {
       this.vendorSource = 'customer';
       this.invHead.invType = 'sales';
     }
+
+    this.loadAllData();
   }
 
   onBack() {
     if (this.pageCnt === -1) {
       console.log('Exit Invoice');
       this.pageCnt -= 1;
+
+      const navigateExtras: NavigationExtras = {
+        state: {
+          cancel: true,
+        },
+      };
+
+      this.navCtrl.navigateBack('/invoices', navigateExtras);
     } else if (this.pageCnt === 0) {
       this.pageView = 'header';
       this.pageCnt -= 1;
     } else if (this.pageCnt > 0) {
       this.pageCnt -= 1;
+      this.pageView = 'lines';
     }
   }
 
   async onNextBtn() {
-    if (this.pageCnt === -1) {
-      this.setupConfig();
-      this.pageCnt += 1;
-      this.pageView = 'lines';
-    } else if (this.pageCnt < this.invHead.invProd - 1) {
-      this.pageCnt += 1;
-    } else if (this.pageCnt === this.invHead.invProd - 1) {
-      console.log('Summary Page...');
-      this.invLines.forEach((element) => {
-        console.log(element);
-      });
+    if (
+      this.invHead.invCurr.length === 0 ||
+      this.invHead.invNumber.length === 0 ||
+      this.invHead.vendorName.length === 0 ||
+      this.invHead.invPayType.length === 0 ||
+      this.invHead.invAmt === null ||
+      this.invHead.invProd === null
+    ) {
+      (
+        await this.toastCtrl.create({
+          message: 'All Fields are mandatory..',
+          duration: 3000,
+        })
+      ).present();
+    } else if (this.invHead.invProd < 1) {
+      (
+        await this.toastCtrl.create({
+          message: 'Invalid Product number.',
+          duration: 3000,
+        })
+      ).present();
+    } else {
+      if (this.pageCnt === -1) {
+        this.setupConfig();
+        this.pageCnt += 1;
+        this.pageView = 'lines';
+      } else if (this.pageCnt < this.invHead.invProd - 1) {
+        if (
+          this.invLines[this.pageCnt].catDesc.length === 0 ||
+          this.invLines[this.pageCnt].productName.length === 0 ||
+          this.invLines[this.pageCnt].purPrice === null ||
+          this.invLines[this.pageCnt].lnQty === null
+        ) {
+          (
+            await this.toastCtrl.create({
+              message: 'All Fields are mandatory..',
+              duration: 3000,
+            })
+          ).present();
+        } else {
+          this.pageCnt += 1;
+        }
+      } else if (this.pageCnt === this.invHead.invProd - 1) {
+        if (
+          this.invLines[this.pageCnt].catDesc.length === 0 ||
+          this.invLines[this.pageCnt].productName.length === 0 ||
+          this.invLines[this.pageCnt].purPrice === null ||
+          this.invLines[this.pageCnt].lnQty === null
+        ) {
+          (
+            await this.toastCtrl.create({
+              message: 'All Fields are mandatory..',
+              duration: 3000,
+            })
+          ).present();
+        } else {
+          this.pageView = 'summary';
+          this.pageCnt += 1;
+        }
+      }
     }
-
-    // console.log(this.invHead);
-    // if (
-    //   this.invHead.invCurr.length === 0 ||
-    //   this.invHead.invNumber.length === 0 ||
-    //   this.invHead.vendorId.length === 0 ||
-    //   this.invHead.invPayType.length === 0 ||
-    //   this.invHead.invAmt === 0 ||
-    //   this.invHead.invQty === 0
-    // ) {
-    //   (
-    //     await this.toastCtrl.create({
-    //       message: 'All Fields are mandatory..',
-    //       duration: 3000,
-    //     })
-    //   ).present();
-    // } else {
-    //   this.pageView = 'lines';
-    // }
   }
 
   setupConfig() {
@@ -175,14 +230,14 @@ export class InvoiceHeaderPage implements OnInit {
       (this.lastInvoice === null && this.lastProd === null) ||
       this.lastInvoice !== this.invHead.invNumber
     ) {
-      this.invLines = [];
+      //this.invLines = [];
       this.lastInvoice = this.invHead.invNumber;
       this.lastProd = this.invHead.invProd;
-      this.invLinesSetup();
+      //this.invLinesSetup();
       this.lastLines = this.invLines;
     } else if (this.lastProd !== this.invHead.invProd) {
-      this.invLines = [];
-      this.invLinesSetup();
+      //this.invLines = [];
+      //this.invLinesSetup();
       for (let i = 0; i < Math.min(this.lastProd, this.invHead.invProd); i++) {
         this.invLines[i] = this.lastLines[i];
       }
@@ -196,21 +251,22 @@ export class InvoiceHeaderPage implements OnInit {
         invNumber: this.invHead.invNumber,
         lnNumber: i + 1,
         lnType: 'Items',
-        lnDesc: '',
-        catCode: '',
-        productCode: '',
+        catDesc: '',
+        productName: '',
         purPrice: null,
         lnQty: null,
         lnAmt: '',
         lnCurr: this.invHead.invCurr,
         gst: '0',
+        gstAmt: '0.00',
+        subTotal: '',
       };
     }
   }
 
   calculateValue() {
     let lineGST: number;
-    const subTotal =
+    const subTot =
       this.invLines[this.pageCnt].purPrice * this.invLines[this.pageCnt].lnQty;
     if (this.invLines[this.pageCnt].gst !== '') {
       lineGST = Number.parseInt(this.invLines[this.pageCnt].gst, 10);
@@ -218,37 +274,76 @@ export class InvoiceHeaderPage implements OnInit {
       lineGST = 0;
     }
 
-    const lineTotal = subTotal + (subTotal * lineGST) / 100;
+    const lineTotal = subTot + (subTot * lineGST) / 100;
 
+    this.invLines[this.pageCnt].gstAmt = ((subTot * lineGST) / 100).toFixed(2);
+    this.invLines[this.pageCnt].subTotal = subTot.toFixed(2);
     this.invLines[this.pageCnt].lnAmt = lineTotal.toFixed(2);
+
+    this.invCalTotal += lineTotal;
+
+    if (lineGST === 5) {
+      this.gst05 += subTot * 0.05;
+    } else if (lineGST === 12) {
+      this.gst12 += subTot * 0.12;
+    } else if (lineGST === 18) {
+      this.gst18 += subTot * 0.18;
+    }
+  }
+
+  getFilterProducts(catg: any) {
+    this.filterProducts = [];
+    let code: string;
+
+    this.inCategory.forEach((val) => {
+      if (val.catDesc === catg) {
+        code = val.catCode;
+      }
+    });
+    console.log(code);
+    this.filterProducts = this.inProducts.filter((e) => e.catCode === code);
+    console.log(this.filterProducts);
+  }
+
+  loadAllData() {
+    this.inVendor = [];
+    this.inCategory = [];
+    this.inProducts = [];
+
+    this.getAllVendors();
+    this.getAllCategory();
+    this.getAllProducts();
   }
 
   loadDummy() {
     this.inVendor = [];
     this.inCategory = [];
-    this.invHead = {
-      invNumber: '',
-      invDate: '',
-      vendorId: '',
-      invAmt: null,
-      invProd: null,
-      invPayType: '',
-      invDesc: '',
-      invType: '',
-      invCurr: '',
-    };
+    this.inProducts = [];
 
     // this.invHead = {
-    //   invNumber: 'INV-0001',
-    //   invDate: '2021-09-22T01:02:25.570+05:30',
-    //   vendorId: '101',
-    //   invAmt: 1000.0,
-    //   invProd: 3,
-    //   invPayType: 'UPI',
+    //   invNumber: '',
+    //   invDate: '',
+    //   vendorName: '',
+    //   invAmt: null,
+    //   invProd: null,
+    //   invPayType: '',
     //   invDesc: '',
     //   invType: '',
-    //   invCurr: 'INR',
+    //   invCurr: '',
     // };
+    this.getAllProducts();
+
+    this.invHead = {
+      invNumber: 'INV-0001',
+      invDate: '2021-09-22T01:02:25.570+05:30',
+      vendorName: 'Vendor 2',
+      invAmt: 829.5,
+      invProd: 2,
+      invPayType: 'UPI',
+      invDesc: '',
+      invType: 'Purchase',
+      invCurr: 'INR',
+    };
 
     this.inVendor = [
       {
@@ -261,19 +356,36 @@ export class InvoiceHeaderPage implements OnInit {
       },
     ];
 
-    this.sampleLine = {
-      invNumber: 'INV-0001',
-      lnNumber: 1,
-      lnType: 'Items',
-      lnDesc: 'Candy',
-      catCode: 'A001',
-      productCode: '10001',
-      purPrice: null,
-      lnQty: null,
-      lnAmt: null,
-      lnCurr: 'INR',
-      gst: '0',
-    };
+    this.invLines = [
+      {
+        invNumber: 'INV-0001',
+        lnNumber: 1,
+        lnType: 'Items',
+        catDesc: 'Cups',
+        productName: 'Vanilla',
+        purPrice: 30.0,
+        lnQty: 5,
+        lnAmt: '150.00',
+        lnCurr: 'INR',
+        gst: '0',
+        gstAmt: '0.00',
+        subTotal: '150.00',
+      },
+      {
+        invNumber: 'INV-0001',
+        lnNumber: 2,
+        lnType: 'Items',
+        catDesc: 'Family Pack',
+        productName: 'Chocolate',
+        purPrice: 60.0,
+        lnQty: 10,
+        lnAmt: '708.00',
+        lnCurr: 'INR',
+        gst: '0',
+        gstAmt: '0.00',
+        subTotal: '708.00',
+      },
+    ];
 
     this.inCategory = [
       {
@@ -290,26 +402,26 @@ export class InvoiceHeaderPage implements OnInit {
       },
     ];
 
-    this.inProducts = [
-      {
-        productCode: '10001',
-        productName: 'Candy',
-        catCode: 'A001',
-        mrp: 30.0,
-      },
-      {
-        productCode: '10002',
-        productName: 'Vanilla',
-        catCode: 'A002',
-        mrp: 300.0,
-      },
-      {
-        productCode: '10003',
-        productName: 'Chocolate',
-        catCode: 'A002',
-        mrp: 350.0,
-      },
-    ];
+    // this.inProducts = [
+    //   {
+    //     productCode: '10001',
+    //     productName: 'Candy',
+    //     catCode: 'A001',
+    //     mrp: 30.0,
+    //   },
+    //   {
+    //     productCode: '10002',
+    //     productName: 'Vanilla',
+    //     catCode: 'A002',
+    //     mrp: 300.0,
+    //   },
+    //   {
+    //     productCode: '10003',
+    //     productName: 'Chocolate',
+    //     catCode: 'A002',
+    //     mrp: 350.0,
+    //   },
+    // ];
   }
 
   async getAllVendors() {

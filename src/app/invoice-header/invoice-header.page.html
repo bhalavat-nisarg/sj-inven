@@ -20,6 +20,9 @@
     <ion-title class="ion-text-center" *ngIf="pageView === 'lines'">
       {{invHead.invNumber}}
     </ion-title>
+    <ion-title class="ion-text-center" *ngIf="pageView === 'summary'">
+      Invoice Summary
+    </ion-title>
     <ion-buttons slot="end">
       <ion-icon
         name="arrow-forward"
@@ -31,9 +34,13 @@
 </ion-header>
 
 <ion-content class="ion-no-padding">
-  <ion-img src="../../assets/extras/invoice-bro.png"></ion-img>
+  <ion-img
+    src="../../assets/extras/invoice-bro.png"
+    *ngIf="pageView !== 'summary'"
+  >
+  </ion-img>
   <div class="header" *ngIf="pageView === 'header'">
-    <ion-title class="ion-text-center">Invoice Header</ion-title>
+    <ion-title class="ion-text-center"> Invoice Header </ion-title>
     <ion-grid class="ion-padding-start ion-padding-end">
       <ion-row>
         <ion-col>
@@ -93,12 +100,12 @@
             <ion-label position="floating"> Vendor Name </ion-label>
             <ion-select
               interface="popover"
-              [(ngModel)]="invHead.vendorId"
+              [(ngModel)]="invHead.vendorName"
               required
             >
               <ion-select-option
                 *ngFor="let vend of inVendor"
-                value="{{vend.vendorId}}"
+                value="{{vend.vendorName}}"
               >
                 {{vend.vendorName}}
               </ion-select-option>
@@ -177,7 +184,7 @@
   </div>
 
   <div class="lines" *ngIf="pageView === 'lines'">
-    <ion-title class="ion-text-center">Invoice Lines</ion-title>
+    <ion-title class="ion-text-center"> Invoice Lines </ion-title>
     <ion-grid class="ion-padding-start ion-padding-end">
       <ion-row>
         <ion-col>
@@ -209,11 +216,13 @@
             <ion-label position="floating"> Category </ion-label>
             <ion-select
               interface="popover"
-              [(ngModel)]="invLines[pageCnt].catCode"
+              [(ngModel)]="invLines[pageCnt].catDesc"
+              class="lineCategory"
+              (ngModelChange)="getFilterProducts($event)"
             >
               <ion-select-option
                 *ngFor="let cat of inCategory"
-                value="{{cat.catCode}}"
+                value="{{cat.catDesc}}"
               >
                 {{cat.catDesc}}
               </ion-select-option>
@@ -225,11 +234,11 @@
             <ion-label position="floating"> Product </ion-label>
             <ion-select
               interface="popover"
-              [(ngModel)]="invLines[pageCnt].productCode"
+              [(ngModel)]="invLines[pageCnt].productName"
             >
               <ion-select-option
-                *ngFor="let prod of inProducts"
-                value="{{prod.productCode}}"
+                *ngFor="let prod of filterProducts"
+                value="{{prod.productName}}"
               >
                 {{prod.productName}}
               </ion-select-option>
@@ -281,14 +290,44 @@
               <ion-select-option value="5"> 5% </ion-select-option>
               <ion-select-option value="12"> 12% </ion-select-option>
               <ion-select-option value="18"> 18% </ion-select-option>
-              <ion-select-option value="10"> 10% </ion-select-option>
             </ion-select>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item>
-            <ion-label position="floating"> Line Total </ion-label>
+            <ion-label position="floating"> GST Value </ion-label>
             <ion-input
+              type="number"
+              inputmode="number"
+              [(ngModel)]="invLines[pageCnt].gstAmt"
+              readonly
+            >
+              <span *ngIf="invLines[pageCnt].gstAmt"> &#8377; &nbsp; </span>
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating"> Sub Total </ion-label>
+            <ion-input
+              type="number"
+              inputmode="number"
+              [(ngModel)]="invLines[pageCnt].subTotal"
+              readonly
+            >
+              <span *ngIf="invLines[pageCnt].subTotal"> &#8377; &nbsp; </span>
+            </ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating" class="prod-label">
+              Total
+            </ion-label>
+            <ion-input
+              class="prod-label"
               type="number"
               inputmode="number"
               [(ngModel)]="invLines[pageCnt].lnAmt"
@@ -297,6 +336,227 @@
               <span *ngIf="invLines[pageCnt].lnAmt"> &#8377; &nbsp; </span>
             </ion-input>
           </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div class="summary" *ngIf="pageView === 'summary'">
+    <ion-title class="ion-text-center ion-padding-bottom ion-padding-top">
+      {{invHead.invNumber}}
+    </ion-title>
+    <ion-grid class="ion-padding-start ion-padding-end">
+      <ion-row>
+        <ion-col>
+          <ion-label class="prod-label"> Invoice Date </ion-label> <br />
+          <ion-label> {{invHead.invDate | date: 'dd-MMM-yyyy'}} </ion-label>
+        </ion-col>
+        <ion-col>
+          <ion-label class="prod-label"> Vendor Name </ion-label> <br />
+          <ion-label> {{invHead.vendorName}} </ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label class="prod-label"> Invoice Currency </ion-label> <br />
+          <ion-label> {{invHead.invCurr}} </ion-label>
+        </ion-col>
+        <ion-col>
+          <ion-label class="prod-label"> Payment Type </ion-label> <br />
+          <ion-label> {{invHead.invPayType}} </ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label class="prod-label"> Total Products </ion-label> <br />
+          <ion-label> {{invHead.invProd}} </ion-label>
+        </ion-col>
+        <ion-col>
+          <ion-label class="prod-label"> Total Amount </ion-label> <br />
+          <ion-label> &#8377; {{invHead.invAmt | number: '1.2-2'}} </ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row> &nbsp; </ion-row>
+      <ion-row>
+        <ion-label class="prod-label"> Invoice Lines </ion-label>
+      </ion-row>
+      <ion-row>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="1">
+              <ion-label> # </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label size="3.75"> Product Name </ion-label>
+            </ion-col>
+            <ion-col size="2">
+              <ion-label> Qty </ion-label>
+            </ion-col>
+            <ion-col size="2.25">
+              <ion-label> Price </ion-label>
+            </ion-col>
+            <ion-col size="2.5">
+              <ion-label> Amt </ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngFor="let invLn of invLines">
+            <ion-col size="1">
+              <ion-label> {{invLn.lnNumber}}. </ion-label>
+            </ion-col>
+            <ion-col size="4.5">
+              <ion-label> {{invLn.productName}} </ion-label>
+            </ion-col>
+            <ion-col size="2.10">
+              <ion-label> {{invLn.lnQty}} </ion-label>
+            </ion-col>
+            <ion-col size="2.15">
+              <ion-label> {{invLn.purPrice | number: '1.2-2'}} </ion-label>
+            </ion-col>
+            <ion-col size="2.25">
+              <ion-label>
+                {{invLn.purPrice * invLn.lnQty | number: '1.2-2'}}
+              </ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label size="1.25"> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="3">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="3.25">
+              <ion-label> ---------------- </ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label size="1.25"> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="3.5">
+              <ion-label> GST @5% </ion-label>
+            </ion-col>
+            <ion-col size="2.75">
+              <ion-label> {{gst05 | number: '1.2-2'}} </ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label size="1.25"> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="3.5">
+              <ion-label> GST @12% </ion-label>
+            </ion-col>
+            <ion-col size="2.75">
+              <ion-label> {{gst12 | number: '1.2-2'}} </ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label size="1.25"> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="3.5">
+              <ion-label> GST @18% </ion-label>
+            </ion-col>
+            <ion-col size="2.75">
+              <ion-label> {{gst18 | number: '1.2-2'}} </ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label size="1.25"> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="3">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="3.25">
+              <ion-label> ---------------- </ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label size="1.25"> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="2">
+              <ion-label>
+                <ion-icon
+                  *ngIf="invHead.invAmt === invCalTotal"
+                  slot="end"
+                  name="checkmark-circle-outline"
+                  color="success"
+                >
+                </ion-icon>
+                <ion-icon
+                  *ngIf="invHead.invAmt !== invCalTotal"
+                  slot="end"
+                  name="close-circle-outline"
+                  color="danger"
+                >
+                </ion-icon>
+              </ion-label>
+            </ion-col>
+            <ion-col size="3.5">
+              <ion-label>
+                <span class="prod-label"> Total {{invHead.invCurr}} </span>
+              </ion-label>
+            </ion-col>
+            <ion-col size="2.75">
+              <ion-label
+                class="prod-label"
+                *ngIf="invHead.invAmt === invCalTotal"
+              >
+                {{invCalTotal | number: '1.2-2'}}
+              </ion-label>
+              <ion-label
+                class="prod-label"
+                *ngIf="invHead.invAmt !== invCalTotal"
+                color="danger"
+              >
+                {{invCalTotal | number: '1.2-2'}}
+              </ion-label>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-row>
+      <ion-row> &nbsp; </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label *ngIf="invHead.invAmt !== invCalTotal" color="danger">
+            Invoice total amount is not matching to Invoice header amount
+          </ion-label>
         </ion-col>
       </ion-row>
     </ion-grid>
