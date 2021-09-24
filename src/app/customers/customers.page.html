@@ -4,8 +4,14 @@
       <ion-menu-button id="content"></ion-menu-button>
     </ion-buttons>
     <ion-title class="ion-text-center"> Customers </ion-title>
+    <ion-buttons slot="end" (click)="refresh()">
+      <ion-icon name="refresh" class="end-icon-btn ion-padding-end"></ion-icon>
+    </ion-buttons>
     <ion-buttons slot="end" (click)="addNewCustomers()">
-      <ion-icon name="add" class="end-icon-btn ion-padding-end"></ion-icon>
+      <ion-icon
+        name="add"
+        class="end-icon-btn ion-padding-end ion-padding-start"
+      ></ion-icon>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -13,11 +19,11 @@
 <ion-searchbar showcancelbutton="focus"> </ion-searchbar>
 <ion-content class="ion-padding-bottom">
   <div *ngIf="customers.length === 0">
-    <ion-label><h5 class="text-muted">No Suppliers to Show</h5></ion-label>
+    <ion-label><h5 class="text-muted">No Customers to Show</h5></ion-label>
   </div>
   <div *ngIf="customers.length > 0" class="padding-bottom">
     <ion-label>
-      <h5 class="text-muted">Total {{customers.length}} Suppliers</h5>
+      <h5 class="text-muted">Total {{customers.length}} Customers</h5>
     </ion-label>
     <ion-list *ngFor="let cust of customers" class="custList">
       <ion-item button detail (click)="toVendor(cust)">

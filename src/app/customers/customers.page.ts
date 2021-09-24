@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationExtras } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
 
 import * as Firebase from 'firebase/app';
@@ -33,24 +33,49 @@ export class CustomersPage implements OnInit {
       lastUpdatedBy: '',
     },
   ];
-
   firebase = Firebase.default;
+  source = 'new';
+  searchBar: any;
+  items: any;
 
   constructor(
     private navCtrl: NavController,
-    private loadingCtrl: LoadingController
-  ) {}
+    private loadingCtrl: LoadingController,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    this.route.queryParams.subscribe(() => {
+      if (this.router.getCurrentNavigation().extras.state) {
+        this.source = this.router.getCurrentNavigation().extras.state.source;
+      }
+    });
+    if (this.source === 'new-vendor' || this.source === 'new') {
+      this.customers = [];
+      this.getCustomers();
+    }
+  }
 
   async ngOnInit() {
-    // (
-    //   await this.loadingCtrl.create({
-    //     message: 'Please Wait..',
-    //     duration: 5000,
-    //   })
-    // ).present();
+    (
+      await this.loadingCtrl.create({
+        message: 'Please Wait..',
+        duration: 3000,
+      })
+    ).present();
 
-    this.customers = [];
+    this.searchBar = document.querySelector('ion-searchbar');
+    this.searchBar.addEventListener('ionInput', this.handleInput);
+
     // this.loadDummy();
+  }
+  async refresh() {
+    (
+      await this.loadingCtrl.create({
+        message: 'Please Wait..',
+        duration: 3000,
+      })
+    ).present();
+    this.customers = [];
     this.getCustomers();
   }
 
@@ -133,5 +158,17 @@ export class CustomersPage implements OnInit {
         lastUpdatedBy: '1 Aug 2021',
       },
     ];
+  }
+
+  handleInput(event) {
+    this.items = Array.from(document.querySelectorAll('.custList'));
+    const query = event.srcElement.value.toLowerCase();
+
+    requestAnimationFrame(() => {
+      this.items.forEach((item) => {
+        const shouldShow = item.textContent.toLowerCase().indexOf(query) > -1;
+        item.style.display = shouldShow ? 'block' : 'none';
+      }, this);
+    });
   }
 }

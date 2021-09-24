@@ -28,6 +28,7 @@ export class UsersPage implements OnInit {
   searchBar: any;
   items: any;
   operate = false;
+  delete: boolean;
 
   constructor(
     private router: Router,
@@ -38,6 +39,7 @@ export class UsersPage implements OnInit {
     this.route.queryParams.subscribe(() => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.operate = this.router.getCurrentNavigation().extras.state.operate;
+        this.delete = this.router.getCurrentNavigation().extras.state.delete;
       }
     });
   }
@@ -50,18 +52,31 @@ export class UsersPage implements OnInit {
   }
 
   async ngOnInit() {
-    //this.users = [];
-    this.searchBar = document.querySelector('ion-searchbar');
-    // (
-    //   await this.loadingCtrl.create({
-    //     message: 'Please Wait..',
-    //     duration: 5000,
-    //   })
-    // ).present();
+    (
+      await this.loadingCtrl.create({
+        message: 'Please Wait..',
+        duration: 3000,
+      })
+    ).present();
 
     // this.loadDummyData(); // dummy data for all users
+    this.maxUsers();
+    this.users = [];
     this.getUsers();
+    this.searchBar = document.querySelector('ion-searchbar');
     this.searchBar.addEventListener('ionInput', this.handleInput);
+  }
+
+  async refresh() {
+    (
+      await this.loadingCtrl.create({
+        message: 'Please Wait..',
+        duration: 3000,
+      })
+    ).present();
+
+    this.users = [];
+    this.getUsers();
   }
 
   addNewUser() {
@@ -89,8 +104,8 @@ export class UsersPage implements OnInit {
     this.navCtrl.navigateForward('/add-user', navigationExtra);
   }
 
-  getUsers() {
-    this.firebase
+  async getUsers() {
+    await this.firebase
       .firestore()
       .collection('users')
       .where('account', '==', 'sj')
@@ -180,7 +195,7 @@ export class UsersPage implements OnInit {
             10
           );
         });
-        console.log(this.maxUsersCnt);
+        // console.log(this.maxUsersCnt);
       })
       .catch((error) => console.log(error));
   }

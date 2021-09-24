@@ -177,6 +177,7 @@ export class AddUserPage implements OnInit {
         const navigateExtras: NavigationExtras = {
           state: {
             operate: true,
+            delete: true,
           },
         };
 
@@ -231,6 +232,8 @@ export class AddUserPage implements OnInit {
                   const navigateExtras: NavigationExtras = {
                     state: {
                       operate: true,
+                      delete: false,
+                      user: '',
                     },
                   };
 

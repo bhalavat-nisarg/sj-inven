@@ -9,7 +9,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   {
@@ -86,7 +86,10 @@ const routes: Routes = [
   },
   {
     path: 'invoice-header',
-    loadChildren: () => import('./invoice-header/invoice-header.module').then( m => m.InvoiceHeaderPageModule)
+    loadChildren: () =>
+      import('./invoice-header/invoice-header.module').then(
+        (m) => m.InvoiceHeaderPageModule
+      ),
   },
 ];
 

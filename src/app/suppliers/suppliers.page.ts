@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationExtras } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { LoadingController, NavController } from '@ionic/angular';
 
 import * as Firebase from 'firebase/app';
+import 'firebase/firestore';
 
 @Component({
   selector: 'app-suppliers',
@@ -34,19 +35,47 @@ export class SuppliersPage implements OnInit {
   ];
 
   firebase = Firebase.default;
+  source = 'new';
+  searchBar: any;
+  items: any;
 
-  constructor(private navCtrl: NavController) {}
+  constructor(
+    private navCtrl: NavController,
+    private loadingCtrl: LoadingController,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    this.route.queryParams.subscribe(() => {
+      if (this.router.getCurrentNavigation().extras.state) {
+        this.source = this.router.getCurrentNavigation().extras.state.source;
+      }
+    });
+    if (this.source === 'new-vendor' || this.source === 'new') {
+      this.suppliers = [];
+      this.getSuppliers();
+    }
+  }
 
   async ngOnInit() {
-    // (
-    //   await this.loadingCtrl.create({
-    //     message: 'Please Wait..',
-    //     duration: 5000,
-    //   })
-    // ).present();
+    (
+      await this.loadingCtrl.create({
+        message: 'Please Wait..',
+        duration: 3000,
+      })
+    ).present();
 
+    this.searchBar = document.querySelector('ion-searchbar');
+    this.searchBar.addEventListener('ionInput', this.handleInput);
+  }
+
+  async refresh() {
+    (
+      await this.loadingCtrl.create({
+        message: 'Please Wait..',
+        duration: 3000,
+      })
+    ).present();
     this.suppliers = [];
-    // this.loadDummy();
     this.getSuppliers();
   }
 
@@ -129,5 +158,17 @@ export class SuppliersPage implements OnInit {
         lastUpdatedBy: '1 Aug 2021',
       },
     ];
+  }
+
+  handleInput(event) {
+    this.items = Array.from(document.querySelectorAll('.suppList'));
+    const query = event.srcElement.value.toLowerCase();
+
+    requestAnimationFrame(() => {
+      this.items.forEach((item) => {
+        const shouldShow = item.textContent.toLowerCase().indexOf(query) > -1;
+        item.style.display = shouldShow ? 'block' : 'none';
+      }, this);
+    });
   }
 }

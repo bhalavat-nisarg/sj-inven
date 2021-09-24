@@ -54,22 +54,34 @@ export class InventoryPage implements OnInit {
 
   async ngOnInit() {
     this.inProducts = [];
-    this.searchBar = document.querySelector('ion-searchbar');
-
-    // (
-    //   await this.loadingCtrl.create({
-    //     message: 'Please Wait..',
-    //     duration: 5000,
-    //   })
-    // ).present();
-
-    console.log(this.productPage);
-    if (this.productPage === false) {
-      console.log('Not from Product Page');
-    }
-    //this.loadingDummy();
     this.getProducts();
+
+    (
+      await this.loadingCtrl.create({
+        message: 'Please Wait..',
+        duration: 3000,
+      })
+    ).present();
+
+    // console.log(this.productPage);
+    // if (this.productPage === false) {
+    //   console.log('Not from Product Page');
+    // }
+    //this.loadingDummy();
+    this.searchBar = document.querySelector('ion-searchbar');
     this.searchBar.addEventListener('ionInput', this.handleInput);
+  }
+
+  async refresh() {
+    (
+      await this.loadingCtrl.create({
+        message: 'Please Wait..',
+        duration: 3000,
+      })
+    ).present();
+
+    this.inProducts = [];
+    this.getProducts();
   }
 
   goToCategory() {
