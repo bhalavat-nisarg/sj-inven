@@ -6,7 +6,6 @@ import {
   NavController,
   ToastController,
 } from '@ionic/angular';
-import { Storage } from '@ionic/storage-angular';
 import { Buffer } from 'buffer';
 import { GlobalConstants } from '../common/global';
 

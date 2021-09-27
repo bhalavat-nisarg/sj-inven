@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, ToastController } from '@ionic/angular';
-import { Storage } from '@ionic/storage-angular';
 import { Buffer } from 'buffer';
 import { GlobalConstants } from '../common/global';
 
@@ -31,12 +30,9 @@ export class LoginPage implements OnInit {
   loginURL = GlobalConstants.apiURL + '/sj/auth/login';
 
   constructor(
-    private storage: Storage,
     private navCtrl: NavController,
     private toastCtrl: ToastController
-  ) {
-    this.storage.clear();
-  }
+  ) {}
 
   ngOnInit() {
     this.userInfo.username = 'dummy.user2';

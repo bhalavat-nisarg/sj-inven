@@ -1,7 +1,13 @@
 import { Component } from '@angular/core';
-import { AlertController, NavController } from '@ionic/angular';
+import {
+  AlertController,
+  IonRouterOutlet,
+  NavController,
+} from '@ionic/angular';
 
 import { Platform } from '@ionic/angular';
+import { App } from '@Capacitor/app';
+import { PluginListenerHandle } from '@capacitor/core';
 
 @Component({
   selector: 'app-home',
@@ -17,11 +23,46 @@ export class HomePage {
     role: 5,
   };
 
+  handle: PluginListenerHandle = App.addListener(
+    'backButton',
+    this.listenerFunc
+  );
+
   constructor(
     private navCtrl: NavController,
     private alertCtrl: AlertController,
-    private platform: Platform
-  ) {}
+    private platform: Platform,
+    private routerOutlet: IonRouterOutlet
+  ) {
+    // this.platform.backButton.subscribeWithPriority(-1, async () => {
+    //   if (!this.routerOutlet.canGoBack()) {
+    //     (
+    //       await this.alertCtrl.create({
+    //         header: 'Quit App?',
+    //         buttons: [
+    //           {
+    //             text: 'Yes',
+    //             role: 'submit',
+    //             handler: () => {
+    //               App.exitApp();
+    //             },
+    //           },
+    //           {
+    //             text: 'No',
+    //             role: 'cancel',
+    //           },
+    //         ],
+    //       })
+    //     ).present();
+    //   } else {
+    //     this.navCtrl.back();
+    //   }
+    // });
+  }
+
+  async listenerFunc() {
+    this.navCtrl.back();
+  }
 
   inventory() {
     this.navCtrl.navigateRoot('/inventory');
@@ -48,14 +89,6 @@ export class HomePage {
   }
 
   exit() {
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    navigator['app'].exitApp();
-  }
-
-  ionViewDidEnter() {
-    this.platform.backButton.subscribe(() => {
-      // eslint-disable-next-line @typescript-eslint/dot-notation
-      navigator['app'].exitApp();
-    });
+    App.exitApp();
   }
 }

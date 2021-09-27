@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { AlertController, MenuController, NavController } from '@ionic/angular';
-import { Storage } from '@ionic/storage-angular';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -31,23 +30,9 @@ export class AppComponent {
   constructor(
     private navCtrl: NavController,
     private menuCtrl: MenuController,
-    private storage: Storage,
     private alertCtrl: AlertController
   ) {
     firebase.initializeApp(this.firebaseConfig);
-
-    this.storage.create();
-    this.storage.get('email').then((val) => (this.userInfo.email = val));
-
-    // firebase
-    //   .firestore()
-    //   .enablePersistence()
-    //   .then(() => console.log('Offline Enabled'))
-    //   .catch((err) => console.error(err));
-
-    // firebase.firestore().settings({
-    //   cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
-    // });
   }
 
   account() {
