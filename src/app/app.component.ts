@@ -4,6 +4,8 @@ import { AlertController, MenuController, NavController } from '@ionic/angular';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+import { App } from '@capacitor/app';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -97,7 +99,6 @@ export class AppComponent {
   }
 
   exit() {
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    navigator['app'].exitApp();
+    App.exitApp();
   }
 }

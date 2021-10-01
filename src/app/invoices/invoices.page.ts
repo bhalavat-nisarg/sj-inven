@@ -134,7 +134,14 @@ export class InvoicesPage implements OnInit {
       .catch((e) => console.log(e));
   }
 
-  async viewInvoice(invVal: any) {}
+  async viewInvoice(invVal: any) {
+    const navigateExtras: NavigationExtras = {
+      state: {
+        invHead: invVal,
+      },
+    };
+    this.navCtrl.navigateForward('/printing', navigateExtras);
+  }
 
   handleInput(event) {
     this.items = Array.from(document.querySelectorAll('.invList'));

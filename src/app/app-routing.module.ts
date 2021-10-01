@@ -91,6 +91,10 @@ const routes: Routes = [
         (m) => m.InvoiceHeaderPageModule
       ),
   },
+  {
+    path: 'printing',
+    loadChildren: () => import('./printing/printing.module').then( m => m.PrintingPageModule)
+  },
 ];
 
 @NgModule({

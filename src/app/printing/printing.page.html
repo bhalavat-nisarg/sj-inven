@@ -1,0 +1,144 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" (click)="onCancel()">
+      <ion-icon name="close" class="end-icon-btn ion-padding-start"></ion-icon>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Print Receipt</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="print" class="end-icon-btn ion-padding-end"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="ion-padding-start ion-padding-end">
+    <ion-row>
+      <ion-col>
+        <ion-img src="../../assets/sj_logo.png"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="addrLine">
+        <ion-label>
+          GF-20, Shreeji Vila, Nr. D-Mart, <br />
+          Waghodia Road, Vadodara <br />
+          390019
+        </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="addrLine">
+        <ion-label> --------------------------------------------- </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="left">
+        <ion-label> E#: dummy.user </ion-label>
+      </ion-col>
+      <ion-col class="right">
+        <ion-label>
+          Dt: {{invHead.invDate | date:'dd-MM-yyyy hh:mm a'}}</ion-label
+        >
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="left">
+        <ion-label> Name: {{invHead.vendorName}} </ion-label>
+      </ion-col>
+      <ion-col class="right">
+        <ion-label> Phone: {{invHead.mobile}}</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="left">
+        <ion-label> Invoice #: {{invHead.invNumber}} </ion-label>
+      </ion-col>
+      <ion-col class="right">
+        <ion-label> Payment: {{invHead.invPayType}} </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="addrLine"> &nbsp; </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="1.45" class="left">
+        <ion-label> <b> Qty </b> </ion-label>
+      </ion-col>
+      <ion-col class="left">
+        <ion-label> <b> Item </b> </ion-label>
+      </ion-col>
+      <ion-col size="3.5" class="right">
+        <ion-label> <b> Price </b> </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let lines of invLines">
+      <ion-col size="1.45" class="left">
+        <ion-label> {{lines.lnQty}} </ion-label>
+      </ion-col>
+      <ion-col class="left">
+        <ion-label> {{lines.productName}} {{lines.catDesc}} </ion-label>
+      </ion-col>
+      <ion-col size="3.5" class="right">
+        <ion-label> &#8377; {{lines.lnAmt}} </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="addrLine"> &nbsp; </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="left">
+        <ion-label> Sub Total </ion-label>
+      </ion-col>
+      <ion-col class="right">
+        <ion-label> &#8377; {{subTotal | number: '1.2-2'}} </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="left">
+        <ion-label> Round Off </ion-label>
+      </ion-col>
+      <ion-col class="right">
+        <ion-label> &#8377; {{roundOff | number: '1.2-2'}} </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="left">
+        <ion-label> Discount </ion-label>
+      </ion-col>
+      <ion-col class="right">
+        <ion-label> &#8377; {{discount | number: '1.2-2'}} </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="left">
+        <ion-label> Tax </ion-label>
+      </ion-col>
+      <ion-col class="right">
+        <ion-label> &#8377; {{gstAmt | number: '1.2-2'}} </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="left">
+        <ion-label> <b> Total Amount </b> </ion-label>
+      </ion-col>
+      <ion-col class="right">
+        <ion-label>
+          <b> &#8377; {{invHead.invAmt | number: '1.2-2'}} </b>
+        </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col> &nbsp; </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="left end-contact">
+        <ion-label> Phone No : 8511666276 </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="left end-contact">
+        <ion-label> E-mail : scoopandjoy@gmail.com </ion-label>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

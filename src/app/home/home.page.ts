@@ -3,10 +3,11 @@ import {
   AlertController,
   IonRouterOutlet,
   NavController,
+  ToastController,
 } from '@ionic/angular';
 
 import { Platform } from '@ionic/angular';
-import { App } from '@Capacitor/app';
+import { App } from '@capacitor/app';
 import { PluginListenerHandle } from '@capacitor/core';
 
 @Component({
@@ -23,46 +24,54 @@ export class HomePage {
     role: 5,
   };
 
-  handle: PluginListenerHandle = App.addListener(
-    'backButton',
-    this.listenerFunc
-  );
+  // handle: PluginListenerHandle = App.addListener(
+  //   'backButton',
+  //   this.listenerFunc
+  // );
 
   constructor(
     private navCtrl: NavController,
     private alertCtrl: AlertController,
     private platform: Platform,
-    private routerOutlet: IonRouterOutlet
+    private routerOutlet: IonRouterOutlet,
+    private toastCtrl: ToastController
   ) {
-    // this.platform.backButton.subscribeWithPriority(-1, async () => {
-    //   if (!this.routerOutlet.canGoBack()) {
-    //     (
-    //       await this.alertCtrl.create({
-    //         header: 'Quit App?',
-    //         buttons: [
-    //           {
-    //             text: 'Yes',
-    //             role: 'submit',
-    //             handler: () => {
-    //               App.exitApp();
-    //             },
-    //           },
-    //           {
-    //             text: 'No',
-    //             role: 'cancel',
-    //           },
-    //         ],
-    //       })
-    //     ).present();
-    //   } else {
-    //     this.navCtrl.back();
-    //   }
-    // });
+    this.platform.backButton.subscribeWithPriority(-1, async () => {
+      (
+        await this.toastCtrl.create({
+          message: 'Back Pressed..',
+          duration: 3000,
+        })
+      ).present();
+
+      // if (!this.routerOutlet.canGoBack()) {
+      //   (
+      //     await this.alertCtrl.create({
+      //       header: 'Quit App?',
+      //       buttons: [
+      //         {
+      //           text: 'Yes',
+      //           role: 'submit',
+      //           handler: () => {
+      //             App.exitApp();
+      //           },
+      //         },
+      //         {
+      //           text: 'No',
+      //           role: 'cancel',
+      //         },
+      //       ],
+      //     })
+      //   ).present();
+      // } else {
+      //   this.navCtrl.back();
+      // }
+    });
   }
 
-  async listenerFunc() {
-    this.navCtrl.back();
-  }
+  // async listenerFunc() {
+  //   this.navCtrl.back();
+  // }
 
   inventory() {
     this.navCtrl.navigateRoot('/inventory');

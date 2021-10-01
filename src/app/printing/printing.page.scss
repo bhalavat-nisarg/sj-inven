@@ -1,0 +1,27 @@
+ion-content {
+  //   font-family: "Quicksand", sans-serif;
+  font-size: 15px;
+  .addrLine {
+    font-family: "Quicksand", sans-serif;
+    text-align: center;
+    font-size: 16px;
+  }
+  ion-img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+  }
+  .left {
+    float: left;
+    text-align: left;
+  }
+  .right {
+    float: right;
+    text-align: right;
+  }
+  .end-contact {
+    font-family: "PT Sans", sans-serif;
+    font-size: 16px;
+  }
+}
