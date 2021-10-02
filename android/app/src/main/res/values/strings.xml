@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">sj-inven</string>
-    <string name="title_activity_main">sj-inven</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="app_name">Invent Inc</string>
+    <string name="title_activity_main">Invent Inc</string>
+    <string name="package_name">com.bit_fields.sj.starter</string>
+    <string name="custom_url_scheme">com.bit-fields.sj</string>
 </resources>
