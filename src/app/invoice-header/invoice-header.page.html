@@ -1,16 +1,14 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
+<ion-header [translucent]="true">
+  <ion-toolbar color="danger">
+    <ion-buttons slot="start" (click)="onBack()">
       <ion-icon
         name="close"
         class="end-icon-btn ion-padding-start"
-        (click)="onBack()"
         *ngIf="pageView === 'header'"
       ></ion-icon>
       <ion-icon
         name="arrow-back"
         class="end-icon-btn ion-padding-start"
-        (click)="onBack()"
         *ngIf="pageView !== 'header'"
       ></ion-icon>
     </ion-buttons>
@@ -18,16 +16,21 @@
       Add New invoice
     </ion-title>
     <ion-title class="ion-text-center" *ngIf="pageView === 'lines'">
-      {{invHead.invNumber}}
+      {{invHead.invType}} - {{invHead.invNumber}}
     </ion-title>
     <ion-title class="ion-text-center" *ngIf="pageView === 'summary'">
       Invoice Summary
     </ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" (click)="onNextBtn()">
       <ion-icon
         name="arrow-forward"
         class="end-icon-btn ion-padding-end"
-        (click)="onNextBtn()"
+        *ngIf="pageView !== 'summary'"
+      ></ion-icon>
+      <ion-icon
+        name="checkmark"
+        class="end-icon-btn ion-padding-end"
+        *ngIf="pageView === 'summary'"
       ></ion-icon>
     </ion-buttons>
   </ion-toolbar>
@@ -78,7 +81,7 @@
               inputmode="text"
               [(ngModel)]="invHead.invNumber"
               maxlength="15"
-              required
+              readonly
             >
             </ion-input>
           </ion-item>
@@ -89,19 +92,36 @@
             <ion-datetime
               displayFormat="DD-MMM-YYYY"
               [(ngModel)]="invHead.invDate"
-              required
+              readonly
             ></ion-datetime>
           </ion-item>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
-          <ion-item>
-            <ion-label position="floating"> Vendor Name </ion-label>
+          <ion-item *ngIf="invHead.invType === 'purchase'">
+            <ion-label position="floating"> Supplier Name </ion-label>
             <ion-select
               interface="popover"
               [(ngModel)]="invHead.vendorName"
               required
+              (ngModelChange)="getMobileNumber($event)"
+            >
+              <ion-select-option
+                *ngFor="let vend of inVendor"
+                value="{{vend.vendorName}}"
+              >
+                {{vend.vendorName}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item *ngIf="invHead.invType === 'sales'">
+            <ion-label position="floating"> Customer Name </ion-label>
+            <ion-select
+              interface="popover"
+              [(ngModel)]="invHead.vendorName"
+              required
+              (ngModelChange)="getMobileNumber($event)"
             >
               <ion-select-option
                 *ngFor="let vend of inVendor"
@@ -114,18 +134,39 @@
         </ion-col>
         <ion-col>
           <ion-item>
+            <ion-label position="floating"> Mobile No. </ion-label>
+            <ion-input
+              type="text"
+              inputmode="number"
+              [(ngModel)]="invHead.mobile"
+              required
+              minlength="0"
+              maxlength="10"
+            >
+              <span *ngIf="invHead.mobile"> +91 &nbsp; </span>
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
             <ion-label position="floating"> Payment Type </ion-label>
             <ion-select
               interface="popover"
               [(ngModel)]="invHead.invPayType"
               required
+              *ngIf="invHead.invType === 'purchase'"
             >
               <ion-select-option value="UPI"> UPI </ion-select-option>
+              <ion-select-option value="Cash"> Cash </ion-select-option>
               <ion-select-option value="NEFT/IMPS">
                 NEFT/IMPS
               </ion-select-option>
               <ion-select-option value="Cheque"> Cheque </ion-select-option>
-              <ion-select-option value="Cash"> Cash </ion-select-option>
+              <ion-select-option value="Credit/Debit Card">
+                Credit/Debit Card
+              </ion-select-option>
               <ion-select-option value="Credit Note">
                 Credit Note
               </ion-select-option>
@@ -133,24 +174,16 @@
                 Debit Note
               </ion-select-option>
             </ion-select>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-            <ion-label position="floating"> Total Amount </ion-label>
-            <ion-input
-              type="number"
-              inputmode="number"
-              [(ngModel)]="invHead.invAmt"
+            <ion-select
+              interface="popover"
+              [(ngModel)]="invHead.invPayType"
               required
-              min="0"
+              *ngIf="invHead.invType === 'sales'"
             >
-              <span *ngIf="invHead.invAmt && invHead.invCurr">
-                &#8377; &nbsp;
-              </span>
-            </ion-input>
+              <ion-select-option *ngFor="let pay of inPayments" value="{{pay}}">
+                {{pay}}
+              </ion-select-option>
+            </ion-select>
           </ion-item>
         </ion-col>
         <ion-col>
@@ -230,11 +263,21 @@
           </ion-item>
         </ion-col>
         <ion-col>
-          <ion-item>
+          <ion-item *ngIf="!invLines[pageCnt].catDesc">
             <ion-label position="floating"> Product </ion-label>
             <ion-select
               interface="popover"
               [(ngModel)]="invLines[pageCnt].productName"
+              disabled
+            >
+            </ion-select>
+          </ion-item>
+          <ion-item *ngIf="invLines[pageCnt].catDesc">
+            <ion-label position="floating"> Product </ion-label>
+            <ion-select
+              interface="popover"
+              [(ngModel)]="invLines[pageCnt].productName"
+              (ngModelChange)="getProductPrice($event)"
             >
               <ion-select-option
                 *ngFor="let prod of filterProducts"
@@ -249,23 +292,21 @@
       <ion-row>
         <ion-col>
           <ion-item>
-            <ion-label position="floating">
-              {{source | titlecase}} Price
-            </ion-label>
+            <ion-label position="floating"> MRP (A) </ion-label>
             <ion-input
               type="number"
               inputmode="number"
               min="0"
               [(ngModel)]="invLines[pageCnt].purPrice"
-              (ngModelChange)="calculateValue()"
+              readonly
             >
-              <!-- <span *ngIf="currencyMarker"> &#8377; &nbsp;</span> -->
+              <span *ngIf="invLines[pageCnt].purPrice"> &#8377; &nbsp;</span>
             </ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item>
-            <ion-label position="floating"> Quantity </ion-label>
+            <ion-label position="floating"> Quantity (B) </ion-label>
             <ion-input
               type="number"
               inputmode="number"
@@ -279,7 +320,16 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <ion-item>
+          <ion-item *ngIf="!invLines[pageCnt].productName">
+            <ion-label position="floating"> GST </ion-label>
+            <ion-select
+              interface="popover"
+              [(ngModel)]="invLines[pageCnt].gst"
+              disabled
+            >
+            </ion-select>
+          </ion-item>
+          <ion-item *ngIf="invLines[pageCnt].productName">
             <ion-label position="floating"> GST </ion-label>
             <ion-select
               interface="popover"
@@ -294,8 +344,12 @@
           </ion-item>
         </ion-col>
         <ion-col>
-          <ion-item>
-            <ion-label position="floating"> GST Value </ion-label>
+          <ion-item *ngIf="!invLines[pageCnt].productName">
+            <ion-label position="floating"> GST Value (C) </ion-label>
+            <ion-input type="number" inputmode="number" readonly> </ion-input>
+          </ion-item>
+          <ion-item *ngIf="invLines[pageCnt].productName">
+            <ion-label position="floating"> GST Value (C) </ion-label>
             <ion-input
               type="number"
               inputmode="number"
@@ -310,7 +364,7 @@
       <ion-row>
         <ion-col>
           <ion-item>
-            <ion-label position="floating"> Sub Total </ion-label>
+            <ion-label position="floating"> Sub Total (D = A * B) </ion-label>
             <ion-input
               type="number"
               inputmode="number"
@@ -324,7 +378,7 @@
         <ion-col>
           <ion-item>
             <ion-label position="floating" class="prod-label">
-              Total
+              Total (C + D)
             </ion-label>
             <ion-input
               class="prod-label"
@@ -342,18 +396,23 @@
   </div>
 
   <div class="summary" *ngIf="pageView === 'summary'">
-    <ion-title class="ion-text-center ion-padding-bottom ion-padding-top">
-      {{invHead.invNumber}}
+    <ion-title class="ion-padding">
+      <span class="ion-padding-start" style="float: left">
+        {{invHead.invType | titlecase}} #: {{invHead.invNumber}}
+      </span>
+      <span class="ion-padding-end" style="float: right">
+        {{invHead.invDate | date: 'dd-MMM-yyyy'}}
+      </span>
     </ion-title>
     <ion-grid class="ion-padding-start ion-padding-end">
       <ion-row>
         <ion-col>
-          <ion-label class="prod-label"> Invoice Date </ion-label> <br />
-          <ion-label> {{invHead.invDate | date: 'dd-MMM-yyyy'}} </ion-label>
-        </ion-col>
-        <ion-col>
           <ion-label class="prod-label"> Vendor Name </ion-label> <br />
           <ion-label> {{invHead.vendorName}} </ion-label>
+        </ion-col>
+        <ion-col>
+          <ion-label class="prod-label"> Mobile No. </ion-label> <br />
+          <ion-label> +91 {{invHead.mobile}} </ion-label>
         </ion-col>
       </ion-row>
       <ion-row>
@@ -373,12 +432,12 @@
         </ion-col>
         <ion-col>
           <ion-label class="prod-label"> Total Amount </ion-label> <br />
-          <ion-label> &#8377; {{invHead.invAmt | number: '1.2-2'}} </ion-label>
+          <ion-label> &#8377; {{invCalTotal | number: '1.2-2'}} </ion-label>
         </ion-col>
       </ion-row>
       <ion-row> &nbsp; </ion-row>
       <ion-row>
-        <ion-label class="prod-label"> Invoice Lines </ion-label>
+        <ion-label class="prod-label"> Invoice Items </ion-label>
       </ion-row>
       <ion-row>
         <ion-grid>
@@ -413,9 +472,7 @@
               <ion-label> {{invLn.purPrice | number: '1.2-2'}} </ion-label>
             </ion-col>
             <ion-col size="2.25">
-              <ion-label>
-                {{invLn.purPrice * invLn.lnQty | number: '1.2-2'}}
-              </ion-label>
+              <ion-label> {{invLn.subTotal | number: '1.2-2'}} </ion-label>
             </ion-col>
           </ion-row>
           <ion-row>
@@ -510,55 +567,72 @@
             <ion-col>
               <ion-label size="1.25"> &nbsp; </ion-label>
             </ion-col>
-            <ion-col size="2">
-              <ion-label>
-                <ion-icon
-                  *ngIf="invHead.invAmt === invCalTotal"
-                  slot="end"
-                  name="checkmark-circle-outline"
-                  color="success"
-                >
-                </ion-icon>
-                <ion-icon
-                  *ngIf="invHead.invAmt !== invCalTotal"
-                  slot="end"
-                  name="close-circle-outline"
-                  color="danger"
-                >
-                </ion-icon>
-              </ion-label>
-            </ion-col>
+            <ion-col size="2"> &nbsp; </ion-col>
             <ion-col size="3.5">
               <ion-label>
                 <span class="prod-label"> Total {{invHead.invCurr}} </span>
               </ion-label>
             </ion-col>
             <ion-col size="2.75">
-              <ion-label
-                class="prod-label"
-                *ngIf="invHead.invAmt === invCalTotal"
-              >
+              <ion-label class="prod-label">
                 {{invCalTotal | number: '1.2-2'}}
               </ion-label>
-              <ion-label
-                class="prod-label"
-                *ngIf="invHead.invAmt !== invCalTotal"
-                color="danger"
-              >
-                {{invCalTotal | number: '1.2-2'}}
-              </ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label size="1.25"> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="3">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="3.25">
+              <ion-label> ---------------- </ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label size="1.25"> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="3.5">
+              <ion-label> Amt Paid </ion-label>
+            </ion-col>
+            <ion-col size="2.75">
+              <ion-label> {{tender| number: '1.2-2'}} </ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label size="1.25"> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="2">
+              <ion-label> &nbsp; </ion-label>
+            </ion-col>
+            <ion-col size="3.5">
+              <ion-label> Tender Change </ion-label>
+            </ion-col>
+            <ion-col size="2.75">
+              <ion-label> {{tenderCh| number: '1.2-2'}} </ion-label>
             </ion-col>
           </ion-row>
         </ion-grid>
       </ion-row>
       <ion-row> &nbsp; </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-label *ngIf="invHead.invAmt !== invCalTotal" color="danger">
-            Invoice total amount is not matching to Invoice header amount
-          </ion-label>
-        </ion-col>
-      </ion-row>
     </ion-grid>
   </div>
 </ion-content>

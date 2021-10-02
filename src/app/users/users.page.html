@@ -1,15 +1,15 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="danger">
     <ion-buttons slot="start">
       <ion-menu-button id="content"></ion-menu-button>
     </ion-buttons>
     <ion-title class="ion-text-center">My Users </ion-title>
     <ion-buttons slot="end" (click)="refresh()">
-      <ion-icon name="refresh" class="end-icon-btn ion-padding-end"></ion-icon>
+      <ion-icon name="reload" class="end-icon-btn ion-padding-end"></ion-icon>
     </ion-buttons>
     <ion-buttons slot="end" (click)="addNewUser()">
       <ion-icon
-        name="person-add"
+        name="person-add-outline"
         class="end-icon-btn ion-padding-end ion-padding-start"
       ></ion-icon>
     </ion-buttons>

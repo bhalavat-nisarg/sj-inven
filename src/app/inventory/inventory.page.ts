@@ -98,8 +98,8 @@ export class InventoryPage implements OnInit {
     this.navCtrl.navigateForward('/products', navigateExtras);
   }
 
-  getProducts() {
-    this.firebase
+  async getProducts() {
+    await this.firebase
       .firestore()
       .collection('products')
       .orderBy('productCode')
@@ -150,7 +150,7 @@ export class InventoryPage implements OnInit {
 
   handleInput(event) {
     // search Bar
-    this.items = Array.from(document.querySelectorAll('.catList'));
+    this.items = Array.from(document.querySelectorAll('.prodList'));
     // this.items = Array.from(document.querySelector('.prodList').children);
 
     const query = event.srcElement.value.toLowerCase();

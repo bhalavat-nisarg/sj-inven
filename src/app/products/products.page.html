@@ -1,11 +1,13 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <!-- <ion-menu-button id="content"></ion-menu-button> -->
-    </ion-buttons>
-    <ion-title class="ion-text-center">{{inProducts.productName}}</ion-title>
-    <ion-buttons slot="end" (click)="goToInventory()">
-      <ion-icon name="close" class="end-icon-btn ion-padding-end"></ion-icon>
+<ion-header [translucent]="true">
+  <ion-toolbar color="danger">
+    <!-- <ion-buttons slot="end">
+      <ion-menu-button id="content"></ion-menu-button>
+    </ion-buttons> -->
+    <ion-title class="ion-text-center ion-padding-end">
+      {{inProducts.productName}}
+    </ion-title>
+    <ion-buttons slot="start" (click)="goToInventory()">
+      <ion-icon name="close" class="end-icon-btn ion-padding-start"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

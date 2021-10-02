@@ -1,15 +1,15 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header [translucent]="true">
+  <ion-toolbar color="danger">
     <ion-buttons slot="start">
       <ion-menu-button id="content"></ion-menu-button>
     </ion-buttons>
     <ion-title class="ion-text-center">Inventory</ion-title>
     <ion-buttons slot="end" (click)="refresh()">
-      <ion-icon name="refresh" class="end-icon-btn ion-padding-end"></ion-icon>
+      <ion-icon name="reload" class="end-icon-btn ion-padding-end"></ion-icon>
     </ion-buttons>
     <ion-buttons slot="end" (click)="goToCategory()">
       <ion-icon
-        name="pricetags"
+        name="pricetags-outline"
         class="end-icon-btn ion-padding-end ion-padding-start"
       ></ion-icon>
     </ion-buttons>
@@ -32,7 +32,7 @@
       <ion-label class="ion-text-wrap">Purchase Price</ion-label> -->
       <!-- <ion-label class="ion-text-wrap">Selling Price</ion-label> -->
     </ion-item>
-    <ion-list *ngFor="let prod of inProducts" class="catList list-text">
+    <ion-list *ngFor="let prod of inProducts" class="prodList list-text">
       <ion-item detail button (click)="goToProducts(prod)">
         <ion-label class="ion-text-wrap">{{prod.productName}}</ion-label>
         <ion-label class="ion-text-wrap">&nbsp; &nbsp; {{prod.qty}}</ion-label>

@@ -93,7 +93,7 @@ export class NewVendorPage implements OnInit {
     ) {
       (
         await this.toastCtrl.create({
-          message: 'Please Enter All Mandatory Fields..',
+          message: 'Please Enter All Mandatory Fields Correctly..',
           duration: 3000,
         })
       ).present();
@@ -162,7 +162,7 @@ export class NewVendorPage implements OnInit {
         pincode: this.inVendor.pincode,
         description: this.inVendor.description,
         status: 'Active',
-        mobile: this.inVendor.mobile,
+        mobile: Number.parseFloat(this.inVendor.mobile),
         email: this.inVendor.email,
         gst: this.inVendor.gst,
         createdBy: this.firebase.auth().currentUser.displayName,
@@ -315,7 +315,10 @@ export class NewVendorPage implements OnInit {
       if (
         this.inVendor.vendorName.length === 0 ||
         this.inVendor.address1.length === 0 ||
-        this.inVendor.pincode.length === 0
+        this.inVendor.pincode.length === 0 ||
+        this.inVendor.mobile.length === 0 ||
+        this.inVendor.mobile.length < 10 ||
+        this.inVendor.mobile.charAt(0) === '0'
       ) {
         return false;
       } else {

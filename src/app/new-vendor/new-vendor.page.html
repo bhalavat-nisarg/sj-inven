@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header [translucent]="true">
+  <ion-toolbar color="danger">
     <div *ngIf="visibleSection === 'part-a'">
       <ion-title>0% Finished</ion-title>
       <ion-progress-bar value="0"></ion-progress-bar>
@@ -80,13 +80,17 @@
         ></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating"> Mobile Number </ion-label>
+        <ion-label position="floating">
+          Mobile Number <span class="mandate-star"> * </span>
+        </ion-label>
         <ion-input
           type="text"
           inputmode="number"
           maxlength="10"
           [(ngModel)]="inVendor.mobile"
-        ></ion-input>
+        >
+          <span *ngIf="inVendor.mobile"> +91 &nbsp; </span>
+        </ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Email ID </ion-label>

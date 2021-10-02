@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import {
@@ -19,11 +20,10 @@ export class InvoiceHeaderPage implements OnInit {
   firebase = Firebase.default;
 
   pageView = 'header';
-  source = '';
+  source = 'sales';
   editMode: boolean;
   vendorSource: string;
   items: any;
-  currencyMarker = false;
   invCalTotal = 0;
   gst05 = 0;
   gst12 = 0;
@@ -32,6 +32,10 @@ export class InvoiceHeaderPage implements OnInit {
   lastInvoice: string = null;
   lastProd: number = null;
   lastLines: any;
+  tender: number;
+  tenderCh: number;
+  inPayments = [];
+
   filterProducts = [
     {
       productCode: '',
@@ -51,6 +55,7 @@ export class InvoiceHeaderPage implements OnInit {
     invDesc: '',
     invType: '',
     invCurr: 'INR',
+    mobile: '',
   };
 
   invLines = [
@@ -67,6 +72,7 @@ export class InvoiceHeaderPage implements OnInit {
       gst: '',
       gstAmt: '',
       subTotal: '',
+      productCode: '',
     },
   ];
 
@@ -74,6 +80,7 @@ export class InvoiceHeaderPage implements OnInit {
     {
       vendorId: 0,
       vendorName: '',
+      vendorMobile: null,
     },
   ];
 
@@ -123,14 +130,12 @@ export class InvoiceHeaderPage implements OnInit {
     // this.pageView = 'summary';
     // this.pageCnt = 2;
 
-    //this.loadDummy();
-
-    (
-      await this.loadingCtrl.create({
-        message: 'Please wait..',
-        duration: 3000,
-      })
-    ).present();
+    // (
+    //   await this.loadingCtrl.create({
+    //     message: 'Please wait..',
+    //     duration: 3000,
+    //   })
+    // ).present();
 
     if (this.source === 'purchase') {
       this.vendorSource = 'supplier';
@@ -139,7 +144,7 @@ export class InvoiceHeaderPage implements OnInit {
       this.vendorSource = 'customer';
       this.invHead.invType = 'sales';
     }
-
+    // this.loadDummy();
     this.loadAllData();
   }
 
@@ -170,8 +175,8 @@ export class InvoiceHeaderPage implements OnInit {
       this.invHead.invNumber.length === 0 ||
       this.invHead.vendorName.length === 0 ||
       this.invHead.invPayType.length === 0 ||
-      this.invHead.invAmt === null ||
-      this.invHead.invProd === null
+      this.invHead.invProd === null ||
+      this.invHead.mobile.length === 0
     ) {
       (
         await this.toastCtrl.create({
@@ -179,10 +184,17 @@ export class InvoiceHeaderPage implements OnInit {
           duration: 3000,
         })
       ).present();
+    } else if (this.invHead.mobile.length < 10) {
+      (
+        await this.toastCtrl.create({
+          message: 'Invalid Mobile number..',
+          duration: 3000,
+        })
+      ).present();
     } else if (this.invHead.invProd < 1) {
       (
         await this.toastCtrl.create({
-          message: 'Invalid Product number.',
+          message: 'Invalid Product number..',
           duration: 3000,
         })
       ).present();
@@ -221,9 +233,45 @@ export class InvoiceHeaderPage implements OnInit {
             })
           ).present();
         } else {
-          this.calculateSummary();
-          this.pageCnt += 1;
-          this.pageView = 'summary';
+          if (
+            this.invHead.invPayType === 'Cash' &&
+            this.invHead.invType === 'sales'
+          ) {
+            this.calculateSummary();
+            (
+              await this.alertCtrl.create({
+                header: 'Cash Total',
+                subHeader: 'Amount Paid by Customer?',
+                message: `Total Bill: ₹ ` + this.invCalTotal.toFixed(2),
+                inputs: [
+                  {
+                    type: 'number',
+                    value: null,
+                    placeholder: `₹ ` + this.invCalTotal.toFixed(2),
+                  },
+                ],
+                buttons: [
+                  {
+                    text: 'cancel',
+                    role: 'cancel',
+                  },
+                  {
+                    text: 'next',
+                    role: 'submit',
+                    handler: (data) => {
+                      this.tender = data[0];
+                      this.tenderCh = this.invCalTotal - this.tender;
+                      this.pageCnt += 1;
+                      this.pageView = 'summary';
+                    },
+                  },
+                ],
+              })
+            ).present();
+          } else {
+            this.pageCnt += 1;
+            this.pageView = 'summary';
+          }
         }
       } else if (
         this.pageCnt === this.invHead.invProd &&
@@ -237,6 +285,8 @@ export class InvoiceHeaderPage implements OnInit {
         ).present();
         this.loadInvoiceHeader();
         this.loadInvoiceLines();
+        console.log(this.invLines);
+        // this.decrementInven(this.invLines[0]);
       }
     }
   }
@@ -276,6 +326,7 @@ export class InvoiceHeaderPage implements OnInit {
         gst: '0',
         gstAmt: '0.00',
         subTotal: '',
+        productCode: '',
       };
     }
   }
@@ -326,15 +377,17 @@ export class InvoiceHeaderPage implements OnInit {
         code = val.catCode;
       }
     });
-    console.log(code);
+    // console.log(code);
     this.filterProducts = this.inProducts.filter((e) => e.catCode === code);
-    console.log(this.filterProducts);
+    // console.log(this.filterProducts);
   }
 
   loadAllData() {
     this.inVendor = [];
     this.inCategory = [];
     this.inProducts = [];
+
+    this.inPayments = ['Cash', 'UPI', 'Credit/Debit Card'];
 
     this.getAllVendors();
     this.getAllCategory();
@@ -350,6 +403,7 @@ export class InvoiceHeaderPage implements OnInit {
       invDesc: null,
       invType: null,
       invCurr: 'INR',
+      mobile: null,
     };
 
     this.invLines = [
@@ -366,8 +420,11 @@ export class InvoiceHeaderPage implements OnInit {
         gst: null,
         gstAmt: null,
         subTotal: null,
+        productCode: null,
       },
     ];
+
+    this.getInvoiceHeader();
 
     if (this.source === 'purchase') {
       this.vendorSource = 'supplier';
@@ -393,7 +450,9 @@ export class InvoiceHeaderPage implements OnInit {
     //   invDesc: '',
     //   invType: '',
     //   invCurr: '',
+    //   mobile: ''
     // };
+
     this.getAllProducts();
 
     this.invHead = {
@@ -406,16 +465,19 @@ export class InvoiceHeaderPage implements OnInit {
       invDesc: '',
       invType: 'Purchase',
       invCurr: 'INR',
+      mobile: '',
     };
 
     this.inVendor = [
       {
         vendorId: 101,
         vendorName: 'No One Vendors',
+        vendorMobile: '99999XXXXX',
       },
       {
         vendorId: 102,
         vendorName: 'Vendor 2',
+        vendorMobile: '99999XXXXX',
       },
     ];
 
@@ -433,6 +495,7 @@ export class InvoiceHeaderPage implements OnInit {
         gst: '0',
         gstAmt: '0.00',
         subTotal: '150.00',
+        productCode: '',
       },
       {
         invNumber: 'INV-0001',
@@ -447,6 +510,7 @@ export class InvoiceHeaderPage implements OnInit {
         gst: '0',
         gstAmt: '0.00',
         subTotal: '708.00',
+        productCode: '',
       },
     ];
 
@@ -464,6 +528,8 @@ export class InvoiceHeaderPage implements OnInit {
         catDesc: 'Cups',
       },
     ];
+
+    this.getInvoiceHeader();
 
     // this.inProducts = [
     //   {
@@ -487,6 +553,64 @@ export class InvoiceHeaderPage implements OnInit {
     // ];
   }
 
+  getMobileNumber(event) {
+    // console.log(event);
+    const vendors = this.inVendor.reduce((map, obj) => {
+      map[obj.vendorName] = obj.vendorMobile;
+      return map;
+    }, []);
+
+    this.invHead.mobile = vendors[event];
+
+    if (event === 'Others') {
+      this.inPayments = [];
+      this.invHead.invPayType = null;
+      this.inPayments = ['Cash', 'UPI', 'Credit/Debit Card'];
+    } else {
+      this.inPayments = [];
+      this.invHead.invPayType = null;
+      this.inPayments = [
+        'Cheque',
+        'NEFT/IMPS',
+        'Cash',
+        'UPI',
+        'Credit/Debit Card',
+      ];
+    }
+  }
+
+  getProductPrice(event) {
+    const product = this.inProducts.reduce((map, obj) => {
+      map[obj.productName] = [obj.mrp, obj.productCode];
+      return map;
+    }, []);
+    console.log(product[event]);
+
+    this.invLines[this.pageCnt].purPrice = product[event][0];
+    this.invLines[this.pageCnt].productCode = product[event][1];
+  }
+
+  async getInvoiceHeader() {
+    const invoiceType = this.source + '-invoice';
+    // console.log(invoiceType);
+
+    this.invHead.invDate = null;
+    const date = formatDate(new Date(), 'YYYY-MM-ddTHH:mm:ss.sssTZ', 'en');
+    // console.log(date);
+    this.invHead.invDate = new Date().toString();
+
+    await this.firebase
+      .firestore()
+      .collection('counters')
+      .doc(invoiceType)
+      .get()
+      .then((query) => {
+        this.invHead.invNumber = query.get('counter');
+        // console.log(query.get('counter'));
+      })
+      .catch((e) => console.log(e));
+  }
+
   async getAllVendors() {
     await this.firebase
       .firestore()
@@ -499,8 +623,19 @@ export class InvoiceHeaderPage implements OnInit {
           this.inVendor.push({
             vendorId: docRecords.get('vendorId'),
             vendorName: docRecords.get('vendorName'),
+            vendorMobile: docRecords.get('mobile'),
           });
         });
+        if (this.vendorSource === 'customer') {
+          this.inVendor.push({
+            vendorId: Number.parseFloat(
+              this.firebase.firestore.Timestamp.now().valueOf()
+            ),
+            vendorName: 'Others',
+            vendorMobile: null,
+          });
+          this.invHead.vendorName = 'Others';
+        }
       })
       .catch((error) => console.log(error));
   }
@@ -529,7 +664,7 @@ export class InvoiceHeaderPage implements OnInit {
       .then((querySnapshot) => {
         querySnapshot.forEach((docRecords) => {
           this.inProducts.push({
-            productCode: docRecords.get('productCOde'),
+            productCode: docRecords.get('productCode'),
             productName: docRecords.get('productName'),
             catCode: docRecords.get('catCode'),
             mrp: docRecords.get('mrp'),
@@ -578,16 +713,63 @@ export class InvoiceHeaderPage implements OnInit {
           subTotal: lines.subTotal,
         })
         .then(() => {
-          const navigateExtras: NavigationExtras = {
-            state: {
-              mode: 'create',
-            },
-          };
-
-          this.navCtrl.navigateBack('/invoices', navigateExtras);
+          if (this.invHead.invType === 'sales') {
+            this.decrementInven(lines);
+          } else if (this.invHead.invType === 'purchase') {
+            this.incrementInven(lines);
+          }
         })
         .catch((e) => console.log(e));
     }
+    const navigateExtras: NavigationExtras = {
+      state: {
+        mode: 'create',
+      },
+    };
+
+    this.navCtrl.navigateBack('/invoices', navigateExtras);
+  }
+
+  incrementInven(lines) {
+    this.firebase
+      .firestore()
+      .collection('products')
+      .where('productCode', '==', lines.productCode)
+      .get()
+      .then((query) => {
+        query.forEach((rec) => {
+          this.firebase
+            .firestore()
+            .collection('products')
+            .doc(rec.id)
+            .update({
+              qty: this.firebase.firestore.FieldValue.increment(lines.lnQty),
+            })
+            .catch((e) => console.error(e));
+        });
+      })
+      .catch((e) => console.log(e));
+  }
+
+  decrementInven(lines) {
+    this.firebase
+      .firestore()
+      .collection('products')
+      .where('productCode', '==', lines.productCode)
+      .get()
+      .then((query) => {
+        query.forEach((rec) => {
+          this.firebase
+            .firestore()
+            .collection('products')
+            .doc(rec.id)
+            .update({
+              qty: this.firebase.firestore.FieldValue.increment(-lines.lnQty),
+            })
+            .catch((e) => console.error(e));
+        });
+      })
+      .catch((e) => console.log(e));
   }
 
   handleInput(event) {

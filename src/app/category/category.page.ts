@@ -31,7 +31,9 @@ export class CategoryPage implements OnInit {
   constructor(
     private navCtrl: NavController,
     private loadingCtrl: LoadingController
-  ) {}
+  ) {
+    this.getCategory();
+  }
 
   async ngOnInit() {
     this.inCategory = [];
@@ -40,12 +42,11 @@ export class CategoryPage implements OnInit {
     (
       await this.loadingCtrl.create({
         message: 'Please Wait..',
-        duration: 5000,
+        duration: 3000,
       })
     ).present();
 
     // this.loadingDummy();
-    this.getCategory();
     this.searchBar.addEventListener('ionInput', this.handleInput);
   }
 
@@ -53,8 +54,8 @@ export class CategoryPage implements OnInit {
     this.navCtrl.navigateBack('/inventory');
   }
 
-  getCategory() {
-    this.firebase
+  async getCategory() {
+    await this.firebase
       .firestore()
       .collection('category')
       .orderBy('catCode')
