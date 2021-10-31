@@ -35,8 +35,8 @@ export class LoginPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userInfo.username = 'dummy.user2';
-    this.userInfo.password = '123456';
+    // this.userInfo.username = 'dummy.user2';
+    // this.userInfo.password = '123456';
   }
 
   async login() {

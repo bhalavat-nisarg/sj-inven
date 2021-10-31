@@ -23,11 +23,7 @@ export class HomePage {
     username: '',
     role: 5,
   };
-
-  // handle: PluginListenerHandle = App.addListener(
-  //   'backButton',
-  //   this.listenerFunc
-  // );
+  backTimer = 0;
 
   constructor(
     private navCtrl: NavController,
@@ -37,12 +33,17 @@ export class HomePage {
     private toastCtrl: ToastController
   ) {
     this.platform.backButton.subscribeWithPriority(-1, async () => {
-      (
-        await this.toastCtrl.create({
-          message: 'Back Pressed..',
-          duration: 3000,
-        })
-      ).present();
+      if (Date.now() - this.backTimer > 5000) {
+        (
+          await this.toastCtrl.create({
+            message: 'Press back again to Quit!',
+            duration: 3000,
+          })
+        ).present();
+        this.backTimer = Date.now();
+      } else {
+        App.exitApp();
+      }
 
       // if (!this.routerOutlet.canGoBack()) {
       //   (
@@ -68,10 +69,6 @@ export class HomePage {
       // }
     });
   }
-
-  // async listenerFunc() {
-  //   this.navCtrl.back();
-  // }
 
   inventory() {
     this.navCtrl.navigateRoot('/inventory');
