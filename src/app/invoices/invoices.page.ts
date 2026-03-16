@@ -6,8 +6,8 @@ import {
   NavController,
 } from '@ionic/angular';
 
-import * as Firebase from 'firebase/app';
-import 'firebase/firestore';
+import * as Firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 
 @Component({
   selector: 'app-invoices',

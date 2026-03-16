@@ -3,8 +3,8 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 import * as axiosMain from 'axios';
 
-import * as Firebase from 'firebase/app';
-import 'firebase/firestore';
+import * as Firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 
 @Component({
   selector: 'app-new-vendor',
