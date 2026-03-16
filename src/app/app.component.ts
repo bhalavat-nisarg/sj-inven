@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { AlertController, MenuController, NavController } from '@ionic/angular';
 
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
 
 import { App } from '@capacitor/app';
 
