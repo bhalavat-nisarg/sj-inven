@@ -19,7 +19,7 @@
     "@angular/forms": "~21.2.4",
     "@angular/platform-browser": "~21.2.4",
     "@angular/platform-browser-dynamic": "~21.2.4",
-    "@angular/router": "~21.2.4",
+    "@angular/router": "~21.2.24",
     "@capacitor/android": "3.2.3",
     "@capacitor/app": "^1.0.3",
     "@capacitor/core": "3.2.3",
