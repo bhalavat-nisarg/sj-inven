@@ -18,6 +18,16 @@ describe('AppComponent', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
+
+  it('connects the menu to the router outlet outside the menu', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const root: HTMLElement = fixture.nativeElement;
+    const menu = root.querySelector('ion-menu');
+    const outlet = root.querySelector('ion-router-outlet');
+    expect(menu.getAttribute('contentId')).toBe(outlet.id);
+    expect(menu.contains(outlet)).toBeFalse();
+  });
   // TODO: add more tests!
 
 });

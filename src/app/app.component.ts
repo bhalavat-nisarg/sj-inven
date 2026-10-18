@@ -7,6 +7,7 @@ import 'firebase/compat/auth';
 import { App } from '@capacitor/app';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],

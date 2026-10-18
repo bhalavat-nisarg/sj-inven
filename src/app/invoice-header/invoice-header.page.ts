@@ -1,4 +1,3 @@
-import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import {
@@ -12,6 +11,7 @@ import * as Firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 @Component({
+  standalone: false,
   selector: 'app-invoice-header',
   templateUrl: './invoice-header.page.html',
   styleUrls: ['./invoice-header.page.scss'],
@@ -109,7 +109,7 @@ export class InvoiceHeaderPage implements OnInit {
     private alertCtrl: AlertController
   ) {
     this.route.queryParams.subscribe(() => {
-      if (this.router.getCurrentNavigation().extras.state) {
+      if (this.router.getCurrentNavigation()?.extras.state) {
         this.source = this.router.getCurrentNavigation().extras.state.source;
         this.editMode =
           this.router.getCurrentNavigation().extras.state.editMode;
@@ -354,7 +354,7 @@ export class InvoiceHeaderPage implements OnInit {
     this.gst12 = 0;
     this.gst18 = 0;
 
-    // eslint-disable-next-line prefer-const
+
     for (let line of this.invLines) {
       this.invCalTotal += Number.parseFloat(line.lnAmt);
 
@@ -595,8 +595,6 @@ export class InvoiceHeaderPage implements OnInit {
     // console.log(invoiceType);
 
     this.invHead.invDate = null;
-    const date = formatDate(new Date(), 'YYYY-MM-ddTHH:mm:ss.sssTZ', 'en');
-    // console.log(date);
     this.invHead.invDate = new Date().toString();
 
     await this.firebase
@@ -693,7 +691,7 @@ export class InvoiceHeaderPage implements OnInit {
   }
 
   async loadInvoiceLines() {
-    // eslint-disable-next-line prefer-const
+
     for (let lines of this.invLines) {
       await this.firebase
         .firestore()

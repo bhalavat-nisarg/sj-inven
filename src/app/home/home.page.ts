@@ -11,6 +11,7 @@ import { App } from '@capacitor/app';
 import { PluginListenerHandle } from '@capacitor/core';
 
 @Component({
+  standalone: false,
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],

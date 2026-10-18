@@ -5,6 +5,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 @Component({
+  standalone: false,
   selector: 'app-myaccount',
   templateUrl: './myaccount.page.html',
   styleUrls: ['./myaccount.page.scss'],

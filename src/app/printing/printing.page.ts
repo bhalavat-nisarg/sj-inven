@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 
 @Component({
+  standalone: false,
   selector: 'app-printing',
   templateUrl: './printing.page.html',
   styleUrls: ['./printing.page.scss'],
@@ -49,7 +50,7 @@ export class PrintingPage implements OnInit {
     private router: Router
   ) {
     this.route.queryParams.subscribe(() => {
-      if (this.router.getCurrentNavigation().extras.state) {
+      if (this.router.getCurrentNavigation()?.extras.state) {
         this.invHead = this.router.getCurrentNavigation().extras.state.invHead;
         console.log(this.router.getCurrentNavigation().extras.state.invHead);
       }
