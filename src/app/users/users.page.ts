@@ -6,6 +6,7 @@ import * as Firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 @Component({
+  standalone: false,
   selector: 'app-users',
   templateUrl: './users.page.html',
   styleUrls: ['./users.page.scss'],
@@ -37,7 +38,7 @@ export class UsersPage implements OnInit {
     private loadingCtrl: LoadingController
   ) {
     this.route.queryParams.subscribe(() => {
-      if (this.router.getCurrentNavigation().extras.state) {
+      if (this.router.getCurrentNavigation()?.extras.state) {
         this.operate = this.router.getCurrentNavigation().extras.state.operate;
         this.delete = this.router.getCurrentNavigation().extras.state.delete;
       }

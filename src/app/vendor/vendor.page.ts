@@ -6,6 +6,7 @@ import * as Firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 @Component({
+  standalone: false,
   selector: 'app-vendor',
   templateUrl: './vendor.page.html',
   styleUrls: ['./vendor.page.scss'],
@@ -44,7 +45,7 @@ export class VendorPage implements OnInit {
     private alertCtrl: AlertController
   ) {
     this.route.queryParams.subscribe(() => {
-      if (this.router.getCurrentNavigation().extras.state) {
+      if (this.router.getCurrentNavigation()?.extras.state) {
         this.vendor = this.router.getCurrentNavigation().extras.state.vendor;
         this.source = this.router.getCurrentNavigation().extras.state.source;
       }

@@ -9,6 +9,7 @@ import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
 
 @Component({
+  standalone: false,
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
@@ -58,11 +59,11 @@ export class LoginPage implements OnInit {
         },
         {
           headers: {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
+
             //'Content-Type': 'application/json',
-            // eslint-disable-next-line @typescript-eslint/naming-convention
+
             Accept: '*/*',
-            // eslint-disable-next-line @typescript-eslint/naming-convention
+
             Authorization: 'Basic ' + this.apiUser,
           },
         }

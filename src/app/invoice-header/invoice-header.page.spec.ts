@@ -21,4 +21,9 @@ describe('InvoiceHeaderPage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('loads an invoice header without invalid date formatting', async () => {
+    await component.getInvoiceHeader();
+    expect(new Date(component.invHead.invDate).getTime()).not.toBeNaN();
+  });
 });

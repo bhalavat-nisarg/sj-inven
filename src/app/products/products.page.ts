@@ -3,6 +3,7 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 
 @Component({
+  standalone: false,
   selector: 'app-products',
   templateUrl: './products.page.html',
   styleUrls: ['./products.page.scss'],
@@ -31,7 +32,7 @@ export class ProductsPage implements OnInit {
     private navCtrl: NavController
   ) {
     this.route.queryParams.subscribe(() => {
-      if (this.router.getCurrentNavigation().extras.state) {
+      if (this.router.getCurrentNavigation()?.extras.state) {
         this.inProducts =
           this.router.getCurrentNavigation().extras.state.viewProd;
       }

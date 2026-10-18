@@ -15,6 +15,7 @@ import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
 
 @Component({
+  standalone: false,
   selector: 'app-add-user',
   templateUrl: './add-user.page.html',
   styleUrls: ['./add-user.page.scss'],
@@ -49,7 +50,7 @@ export class AddUserPage implements OnInit {
     private loadingCtrl: LoadingController
   ) {
     this.route.queryParams.subscribe(() => {
-      if (this.router.getCurrentNavigation().extras.state) {
+      if (this.router.getCurrentNavigation()?.extras.state) {
         this.accountUsers =
           this.router.getCurrentNavigation().extras.state.accUsers;
         this.totalUsers =
@@ -162,9 +163,9 @@ export class AddUserPage implements OnInit {
         },
         {
           headers: {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
+
             'Content-Type': 'application/json',
-            // eslint-disable-next-line @typescript-eslint/naming-convention
+
             Authorization: 'Basic ' + this.apiUser,
           },
         }
@@ -209,9 +210,9 @@ export class AddUserPage implements OnInit {
         },
         {
           headers: {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
+
             'Content-Type': 'application/json',
-            // eslint-disable-next-line @typescript-eslint/naming-convention
+
             Authorization: 'Basic ' + this.apiUser,
           },
         }

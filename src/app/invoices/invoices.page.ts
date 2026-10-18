@@ -10,6 +10,7 @@ import * as Firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 @Component({
+  standalone: false,
   selector: 'app-invoices',
   templateUrl: './invoices.page.html',
   styleUrls: ['./invoices.page.scss'],
@@ -42,7 +43,7 @@ export class InvoicesPage implements OnInit {
     private loadingCtrl: LoadingController
   ) {
     this.route.queryParams.subscribe(() => {
-      if (this.router.getCurrentNavigation().extras.state) {
+      if (this.router.getCurrentNavigation()?.extras.state) {
         this.mode = this.router.getCurrentNavigation().extras.state.mode;
       }
     });
