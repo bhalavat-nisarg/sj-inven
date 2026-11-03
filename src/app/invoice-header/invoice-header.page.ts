@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import {
   AlertController,
@@ -14,6 +14,7 @@ import 'firebase/compat/firestore';
   standalone: false,
   selector: 'app-invoice-header',
   templateUrl: './invoice-header.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./invoice-header.page.scss'],
 })
 export class InvoiceHeaderPage implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationExtras, Router, ActivatedRoute } from '@angular/router';
 import {
   AlertController,
@@ -18,6 +18,7 @@ import 'firebase/compat/auth';
   standalone: false,
   selector: 'app-add-user',
   templateUrl: './add-user.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./add-user.page.scss'],
 })
 export class AddUserPage implements OnInit {

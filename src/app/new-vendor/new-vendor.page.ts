@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 import * as axiosMain from 'axios';
@@ -10,6 +10,7 @@ import 'firebase/compat/firestore';
   standalone: false,
   selector: 'app-new-vendor',
   templateUrl: './new-vendor.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./new-vendor.page.scss'],
 })
 export class NewVendorPage implements OnInit {

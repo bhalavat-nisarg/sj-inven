@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { LoadingController, NavController } from '@ionic/angular';
 
 import * as Firebase from 'firebase/compat/app';
@@ -8,6 +8,7 @@ import 'firebase/compat/firestore';
   standalone: false,
   selector: 'app-category',
   templateUrl: './category.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./category.page.scss'],
 })
 export class CategoryPage implements OnInit {

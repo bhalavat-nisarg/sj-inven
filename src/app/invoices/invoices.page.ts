@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import {
   AlertController,
@@ -13,6 +13,7 @@ import 'firebase/compat/firestore';
   standalone: false,
   selector: 'app-invoices',
   templateUrl: './invoices.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./invoices.page.scss'],
 })
 export class InvoicesPage implements OnInit {

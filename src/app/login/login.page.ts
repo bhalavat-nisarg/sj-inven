@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { NavController, ToastController } from '@ionic/angular';
 import { Buffer } from 'buffer';
 import { GlobalConstants } from '../common/global';
@@ -12,6 +12,7 @@ import 'firebase/compat/auth';
   standalone: false,
   selector: 'app-login',
   templateUrl: './login.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
