@@ -8,6 +8,8 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: .playwright-browsers
     strategy:
       matrix:
         node-version: [22, 24]
@@ -19,6 +21,10 @@ jobs:
           cache: npm
       - run: npm install --global npm@11.12.1
       - run: npm ci
+      - run: npm run audit
+      - run: npx playwright install --with-deps chromium
       - run: npm run lint
+      - run: npx ng run app:ionic-cordova-build --cordova-mock --cordova-assets=false
       - run: npm run build -- --configuration production --progress=false
-      - run: npm test -- --watch=false --browsers=ChromeHeadless --progress=false
+      - run: npm test -- --watch=false --browsers=ChromiumHeadless --progress=false
+      - run: npm run e2e

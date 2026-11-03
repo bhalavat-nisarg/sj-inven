@@ -1,17 +1,17 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
-  }));
+  });
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
@@ -26,7 +26,7 @@ describe('AppComponent', () => {
     const menu = root.querySelector('ion-menu');
     const outlet = root.querySelector('ion-router-outlet');
     expect(menu.getAttribute('contentId')).toBe(outlet.id);
-    expect(menu.contains(outlet)).toBeFalse();
+    expect(menu.contains(outlet)).toBe(false);
   });
   // TODO: add more tests!
 

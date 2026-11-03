@@ -32,3 +32,8 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+/.playwright-browsers
+/.vitest
+/playwright-report
+/test-results
+/.tools
