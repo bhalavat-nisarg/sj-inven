@@ -6,6 +6,7 @@ import * as Firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 @Component({
+  standalone: false,
   selector: 'app-inventory',
   templateUrl: './inventory.page.html',
   styleUrls: ['./inventory.page.scss'],
@@ -45,7 +46,7 @@ export class InventoryPage implements OnInit {
   ) {
     this.productPage = false;
     this.route.queryParams.subscribe(() => {
-      if (this.router.getCurrentNavigation().extras.state) {
+      if (this.router.getCurrentNavigation()?.extras.state) {
         this.productPage =
           this.router.getCurrentNavigation().extras.state.productPage;
       }

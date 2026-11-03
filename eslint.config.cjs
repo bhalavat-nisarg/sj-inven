@@ -1,0 +1,36 @@
+const angular = require('@angular-eslint/eslint-plugin');
+const template = require('@angular-eslint/eslint-plugin-template');
+const tsParser = require('@typescript-eslint/parser');
+const typescript = require('@typescript-eslint/eslint-plugin');
+const templateParser = require('@angular-eslint/template-parser');
+
+module.exports = [
+  { ignores: ['projects/**', 'www/**', 'android/**', 'node_modules/**'] },
+  {
+    files: ['src/**/*.ts'],
+    languageOptions: { parser: tsParser },
+    plugins: { '@angular-eslint': angular, '@typescript-eslint': typescript },
+    rules: {
+      ...angular.configs.recommended.rules,
+      '@angular-eslint/prefer-standalone': 'off',
+      '@angular-eslint/prefer-inject': 'off',
+      '@angular-eslint/no-empty-lifecycle-method': 'off',
+      '@angular-eslint/component-class-suffix': ['error', { suffixes: ['Page', 'Component'] }],
+      '@angular-eslint/component-selector': [
+        'error', { type: 'element', prefix: 'app', style: 'kebab-case' },
+      ],
+      '@angular-eslint/directive-selector': [
+        'error', { type: 'attribute', prefix: 'app', style: 'camelCase' },
+      ],
+    },
+  },
+  {
+    files: ['src/**/*.html'],
+    languageOptions: { parser: templateParser },
+    plugins: { '@angular-eslint/template': template },
+    rules: {
+      ...template.configs.recommended.rules,
+      '@angular-eslint/template/prefer-control-flow': 'off',
+    },
+  },
+];

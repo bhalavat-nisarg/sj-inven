@@ -6,6 +6,7 @@ import * as Firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 @Component({
+  standalone: false,
   selector: 'app-suppliers',
   templateUrl: './suppliers.page.html',
   styleUrls: ['./suppliers.page.scss'],
@@ -46,7 +47,7 @@ export class SuppliersPage implements OnInit {
     private router: Router
   ) {
     this.route.queryParams.subscribe(() => {
-      if (this.router.getCurrentNavigation().extras.state) {
+      if (this.router.getCurrentNavigation()?.extras.state) {
         this.source = this.router.getCurrentNavigation().extras.state.source;
       }
     });

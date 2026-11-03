@@ -1,6 +1,5 @@
 <ion-app>
   <ion-menu side="start" class="menu_main" contentId="main-content">
-    <div id="main-content"></div>
     <ion-header>
       <ion-toolbar color="dark">
         <ion-title>Hello, {{ userInfo.username }}</ion-title>
@@ -63,5 +62,5 @@
     </ion-content>
   </ion-menu>
 
-  <ion-router-outlet main></ion-router-outlet>
+  <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-app>

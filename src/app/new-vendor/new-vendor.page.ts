@@ -7,6 +7,7 @@ import * as Firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 @Component({
+  standalone: false,
   selector: 'app-new-vendor',
   templateUrl: './new-vendor.page.html',
   styleUrls: ['./new-vendor.page.scss'],
@@ -65,7 +66,7 @@ export class NewVendorPage implements OnInit {
     this.visibleSection = 'part-a';
     this.toggleBtn();
     this.route.queryParams.subscribe(() => {
-      if (this.router.getCurrentNavigation().extras.state) {
+      if (this.router.getCurrentNavigation()?.extras.state) {
         this.source = this.router.getCurrentNavigation().extras.state.source;
         this.editMode =
           this.router.getCurrentNavigation().extras.state.editMode;
