@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
 
@@ -9,6 +9,7 @@ import 'firebase/compat/firestore';
   standalone: false,
   selector: 'app-customers',
   templateUrl: './customers.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./customers.page.scss'],
 })
 export class CustomersPage implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 
@@ -6,6 +6,7 @@ import { NavController } from '@ionic/angular';
   standalone: false,
   selector: 'app-products',
   templateUrl: './products.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./products.page.scss'],
 })
 export class ProductsPage implements OnInit {

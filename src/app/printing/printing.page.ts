@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 
@@ -6,6 +6,7 @@ import { NavController } from '@ionic/angular';
   standalone: false,
   selector: 'app-printing',
   templateUrl: './printing.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./printing.page.scss'],
 })
 export class PrintingPage implements OnInit {

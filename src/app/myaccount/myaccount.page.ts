@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 
 import firebase from 'firebase/compat/app';
@@ -8,6 +8,7 @@ import 'firebase/compat/firestore';
   standalone: false,
   selector: 'app-myaccount',
   templateUrl: './myaccount.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./myaccount.page.scss'],
 })
 export class MyAccountPage implements OnInit {

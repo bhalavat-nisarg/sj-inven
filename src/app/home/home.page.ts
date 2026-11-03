@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   AlertController,
   IonRouterOutlet,
@@ -14,6 +14,7 @@ import { PluginListenerHandle } from '@capacitor/core';
   standalone: false,
   selector: 'app-home',
   templateUrl: 'home.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
